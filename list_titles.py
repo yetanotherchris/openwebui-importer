@@ -35,13 +35,36 @@ def format_human_date(dt: datetime) -> str:
     return f"{weekday} {day} {month} {year}"
 
 
-def detect_format(data: Any, *, validate_schema: bool = False) -> str:
+def detect_format(
+    data: Any,
+    *,
+    validate_schema: bool = False,
+    forced_format: Optional[str] = None,
+) -> str:
     """Return the detected chat export format.
 
     When *validate_schema* is ``True`` the data is validated against the
     bundled JSON schemas which can be significantly slower. By default the
-    function uses lightweight heuristics.
+    function uses lightweight heuristics. If *forced_format* is provided,
+    the function skips detection and optionally validates against the
+    corresponding schema.
     """
+
+    if forced_format:
+        normalized = forced_format.lower()
+        if normalized == "chatgpt":
+            if validate_schema and isinstance(data, list):
+                validate(instance=data, schema=CHATGPT_SCHEMA)
+            return "ChatGPT"
+        if normalized == "grok":
+            if validate_schema and isinstance(data, dict):
+                validate(instance=data, schema=GROK_SCHEMA)
+            return "Grok"
+        if normalized == "claude":
+            if validate_schema and isinstance(data, (list, dict)):
+                validate(instance=data, schema=CLAUDE_SCHEMA_EXAMPLE)
+            return "Claude"
+        raise ValueError(f"Unknown forced format: {forced_format}")
 
     # First try validating against the ChatGPT schema which expects an array of
     # conversations. Some exports may be a single conversation object, so we
@@ -91,12 +114,21 @@ def detect_format(data: Any, *, validate_schema: bool = False) -> str:
     raise ValueError("Unknown export format")
 
 
-def load_titles(path: str, *, validate_schema: bool = False) -> Tuple[str, List[str]]:
-    """Return (format, titles) for the given JSON file."""
+def load_titles(
+    path: str,
+    *,
+    validate_schema: bool = False,
+    forced_format: Optional[str] = None,
+) -> Tuple[str, List[str]]:
+    """Return (format, titles) for the given JSON file.
+
+    If *forced_format* is provided, the file is assumed to be in that format
+    and detection is skipped (apart from optional validation).
+    """
     with open(path, 'r', encoding='utf-8') as f:
         data = json.load(f)
 
-    fmt = detect_format(data, validate_schema=validate_schema)
+    fmt = detect_format(data, validate_schema=validate_schema, forced_format=forced_format)
 
     titles: List[str] = []
     if fmt == 'ChatGPT':
@@ -137,12 +169,21 @@ def load_titles(path: str, *, validate_schema: bool = False) -> Tuple[str, List[
     return fmt, titles
 
 
-def load_titles_and_times(path: str, *, validate_schema: bool = False) -> Tuple[str, List[Tuple[str, Optional[datetime]]]]:
-    """Return (format, [(title, datetime|None)]) for the given JSON file."""
+def load_titles_and_times(
+    path: str,
+    *,
+    validate_schema: bool = False,
+    forced_format: Optional[str] = None,
+) -> Tuple[str, List[Tuple[str, Optional[datetime]]]]:
+    """Return (format, [(title, datetime|None)]) for the given JSON file.
+
+    Providing *forced_format* skips format detection and optionally validates
+    the data against the corresponding schema.
+    """
     with open(path, 'r', encoding='utf-8') as f:
         data = json.load(f)
 
-    fmt = detect_format(data, validate_schema=validate_schema)
+    fmt = detect_format(data, validate_schema=validate_schema, forced_format=forced_format)
 
     results: List[Tuple[str, Optional[datetime]]] = []
 
@@ -203,11 +244,20 @@ def main() -> None:
         action="store_true",
         help="Validate input using JSON schemas (slower)",
     )
+    parser.add_argument(
+        "--format",
+        choices=["Grok", "ChatGPT", "Claude"],
+        help="Specify the chat export format to skip auto-detection",
+    )
     args = parser.parse_args()
 
     for path in args.files:
         try:
-            source, info = load_titles_and_times(path, validate_schema=args.validate)
+            source, info = load_titles_and_times(
+                path,
+                validate_schema=args.validate,
+                forced_format=args.format,
+            )
         except Exception as e:
             print(f"{path}: failed to parse - {e}")
             continue
