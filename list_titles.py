@@ -191,7 +191,13 @@ def main() -> None:
 
         print(f"{path} ({source}):")
 
-        for title, ts in sorted(info, key=lambda x: x[0]):
+        def sort_key(item: Tuple[str, Optional[datetime]]) -> Tuple[float, str]:
+            title, ts = item
+            ts_value = ts.timestamp() if ts is not None else float('-inf')
+            # negative ts_value gives descending order when using ascending sort
+            return (-ts_value, title)
+
+        for title, ts in sorted(info, key=sort_key):
             if args.no_dates or ts is None:
                 print(f'  - "{title}"')
             else:
