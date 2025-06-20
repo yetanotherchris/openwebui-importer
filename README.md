@@ -13,9 +13,10 @@ python list_titles.py <export.json> [more.json ...]
 
 The script supports Grok, Claude, and ChatGPT exports and will report
 the detected format for each file before listing its titles. Detection
-normally relies on quick heuristics. Pass `--validate` to enforce JSON
-schema validation which is slower. If you already know the export
-format you can pass `--format Grok`, `--format ChatGPT`, or
+normally relies on quick heuristics. Use `--validate` to only check the
+file against the appropriate JSON schema; the script will output
+"Validation successful" or "Validation failed". If you already know the
+export format you can pass `--format Grok`, `--format ChatGPT`, or
 `--format Claude` to skip detection. Claude exports can be either a
 list of conversations or an object containing `meta` and `conversations`
 data. Titles are shown with their timestamps unless you pass
