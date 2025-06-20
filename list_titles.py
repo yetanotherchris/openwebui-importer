@@ -291,7 +291,7 @@ def main() -> None:
     parser.add_argument(
         "--validate",
         action="store_true",
-        help="Validate input using JSON schemas (slower)",
+        help="Validate input using JSON schemas and exit",
     )
     parser.add_argument(
         "--format",
@@ -299,6 +299,29 @@ def main() -> None:
         help="Specify the chat export format to skip auto-detection",
     )
     args = parser.parse_args()
+
+    if args.validate:
+        for path in args.files:
+            try:
+                with open(path, "r", encoding="utf-8") as f:
+                    data = json.load(f)
+
+                fmt = args.format or detect_format(data)
+                if fmt == "ChatGPT":
+                    schema = CHATGPT_SCHEMA
+                elif fmt == "Grok":
+                    schema = GROK_SCHEMA
+                elif fmt == "Claude":
+                    schema = CLAUDE_SCHEMA_EXAMPLE
+                else:
+                    raise ValueError("Unknown format")
+
+                validate(instance=data, schema=schema)
+            except Exception:
+                print("Validation failed")
+            else:
+                print("Validation successful")
+        return
 
     for path in args.files:
         try:
