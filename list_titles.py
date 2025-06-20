@@ -35,26 +35,44 @@ def format_human_date(dt: datetime) -> str:
     return f"{weekday} {day} {month} {year}"
 
 
-def detect_format(data: Any) -> str:
-    """Return the detected chat export format using bundled JSON schemas."""
+def detect_format(data: Any, *, validate_schema: bool = False) -> str:
+    """Return the detected chat export format.
+
+    When *validate_schema* is ``True`` the data is validated against the
+    bundled JSON schemas which can be significantly slower. By default the
+    function uses lightweight heuristics.
+    """
 
     # First try validating against the ChatGPT schema which expects an array of
     # conversations. Some exports may be a single conversation object, so we
     # only validate when a list is provided.
     if isinstance(data, list):
-        try:
-            validate(instance=data, schema=CHATGPT_SCHEMA)
-            return "ChatGPT"
-        except ValidationError:
-            pass
+        if validate_schema:
+            try:
+                validate(instance=data, schema=CHATGPT_SCHEMA)
+                return "ChatGPT"
+            except ValidationError:
+                pass
+
+        # Heuristic detection for ChatGPT array exports
+        if data and isinstance(data[0], dict):
+            item = data[0]
+            if any(k in item for k in ("mapping", "chat_messages")):
+                return "ChatGPT"
+            if (
+                ("title" in item or "name" in item)
+                and any(k in item for k in ("create_time", "update_time"))
+            ):
+                return "ChatGPT"
 
     # Grok exports are objects; validate against the Grok schema.
     if isinstance(data, dict):
-        try:
-            validate(instance=data, schema=GROK_SCHEMA)
-            return "Grok"
-        except ValidationError:
-            pass
+        if validate_schema:
+            try:
+                validate(instance=data, schema=GROK_SCHEMA)
+                return "Grok"
+            except ValidationError:
+                pass
 
         # Claude currently ships with an example file instead of a formal JSON
         # schema. Detect it by checking for the keys we see in that example.
@@ -73,12 +91,12 @@ def detect_format(data: Any) -> str:
     raise ValueError("Unknown export format")
 
 
-def load_titles(path: str) -> Tuple[str, List[str]]:
+def load_titles(path: str, *, validate_schema: bool = False) -> Tuple[str, List[str]]:
     """Return (format, titles) for the given JSON file."""
     with open(path, 'r', encoding='utf-8') as f:
         data = json.load(f)
 
-    fmt = detect_format(data)
+    fmt = detect_format(data, validate_schema=validate_schema)
 
     titles: List[str] = []
     if fmt == 'ChatGPT':
@@ -119,12 +137,12 @@ def load_titles(path: str) -> Tuple[str, List[str]]:
     return fmt, titles
 
 
-def load_titles_and_times(path: str) -> Tuple[str, List[Tuple[str, Optional[datetime]]]]:
+def load_titles_and_times(path: str, *, validate_schema: bool = False) -> Tuple[str, List[Tuple[str, Optional[datetime]]]]:
     """Return (format, [(title, datetime|None)]) for the given JSON file."""
     with open(path, 'r', encoding='utf-8') as f:
         data = json.load(f)
 
-    fmt = detect_format(data)
+    fmt = detect_format(data, validate_schema=validate_schema)
 
     results: List[Tuple[str, Optional[datetime]]] = []
 
@@ -180,11 +198,16 @@ def main() -> None:
         action="store_true",
         help="Only print titles without their timestamps",
     )
+    parser.add_argument(
+        "--validate",
+        action="store_true",
+        help="Validate input using JSON schemas (slower)",
+    )
     args = parser.parse_args()
 
     for path in args.files:
         try:
-            source, info = load_titles_and_times(path)
+            source, info = load_titles_and_times(path, validate_schema=args.validate)
         except Exception as e:
             print(f"{path}: failed to parse - {e}")
             continue
