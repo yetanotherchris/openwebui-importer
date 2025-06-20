@@ -1,6 +1,16 @@
 import json
 import sys
+from datetime import datetime
 from typing import Any, List, Tuple
+
+
+def ordinal(n: int) -> str:
+    """Return an ordinal string for the given integer."""
+    if 10 <= n % 100 <= 20:
+        suffix = "th"
+    else:
+        suffix = {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
+    return f"{n}{suffix}"
 
 
 def detect_format(data: Any) -> str:
@@ -79,8 +89,15 @@ def main():
             print(f"{path}: failed to parse - {e}")
             continue
         print(f"{path} ({source}):")
-        for title in titles:
+        for title in sorted(titles):
             print(f"  - {title}")
+
+    answer = input("Show current date and time? [y/N]: ").strip().lower()
+    if answer.startswith('y'):
+        now = datetime.now()
+        day = ordinal(now.day)
+        formatted = now.strftime(f"%a {day} %B %Y")
+        print(formatted)
 
 
 if __name__ == '__main__':
