@@ -1,0 +1,21 @@
+{
+  "name": "What causes rainbows?",
+  "chat_messages": [
+    {
+      "text": "What causes rainbows to appear in the sky?",
+      "content": [
+        {
+          "text": "What causes rainbows to appear in the sky?"
+        }
+      ]
+    },
+    {
+      "text": "Rainbows are formed when sunlight passes through raindrops, which act as prisms and split the light into its different colors.",
+      "content": [
+        {
+          "text": "Rainbows are formed when sunlight passes through raindrops, which act as prisms and split the light into its different colors."
+        }
+      ]
+    }
+  ]
+}

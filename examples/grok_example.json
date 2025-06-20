@@ -1,0 +1,23 @@
+{
+  "title": "How does photosynthesis work?",
+  "mapping": {
+    "client-created-root": {
+      "message": {
+        "content": {
+          "content_type": "text",
+          "parts": ["Can you explain how photosynthesis works in simple terms?"]
+        }
+      }
+    },
+    "41512317-7d30-4caa-84e1-4f12db70ef42": {
+      "message": {
+        "content": {
+          "content_type": "text",
+          "parts": [
+            "Photosynthesis is the process by which plants use sunlight to convert water and carbon dioxide into oxygen and glucose. It helps plants make their own food."
+          ]
+        }
+      }
+    }
+  }
+}
