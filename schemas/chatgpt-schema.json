@@ -1,0 +1,239 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "array",
+  "description": "Schema for ChatGPT conversations export JSON format",
+  "items": {
+    "type": "object",
+    "properties": {
+      "title": {
+        "type": "string",
+        "description": "The title of the conversation"
+      },
+      "create_time": {
+        "type": "number",
+        "description": "Unix timestamp when the conversation was created"
+      },
+      "update_time": {
+        "type": "number",
+        "description": "Unix timestamp when the conversation was last updated"
+      },
+      "mapping": {
+        "type": "object",
+        "description": "Tree structure mapping of all messages in the conversation",
+        "patternProperties": {
+          "^[a-zA-Z0-9-]+$": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "Unique identifier for this node"
+              },
+              "message": {
+                "oneOf": [
+                  {
+                    "type": "null"
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "description": "Message ID"
+                      },
+                      "author": {
+                        "type": "object",
+                        "properties": {
+                          "role": {
+                            "type": "string",
+                            "enum": ["system", "user", "assistant"],
+                            "description": "Role of the message author"
+                          },
+                          "name": {
+                            "type": ["string", "null"],
+                            "description": "Name of the author (usually null)"
+                          },
+                          "metadata": {
+                            "type": "object",
+                            "description": "Additional metadata for the author"
+                          }
+                        },
+                        "required": ["role", "name", "metadata"]
+                      },
+                      "create_time": {
+                        "type": ["number", "null"],
+                        "description": "Unix timestamp when message was created"
+                      },
+                      "update_time": {
+                        "type": ["number", "null"],
+                        "description": "Unix timestamp when message was updated"
+                      },
+                      "content": {
+                        "type": "object",
+                        "properties": {
+                          "content_type": {
+                            "type": "string",
+                            "enum": ["text", "user_editable_context"],
+                            "description": "Type of content in the message"
+                          },
+                          "parts": {
+                            "type": "array",
+                            "items": {
+                              "type": "string"
+                            },
+                            "description": "Array of content parts (for text content)"
+                          },
+                          "user_profile": {
+                            "type": "string",
+                            "description": "User profile information (for user_editable_context)"
+                          },
+                          "user_instructions": {
+                            "type": "string",
+                            "description": "User instructions (for user_editable_context)"
+                          }
+                        },
+                        "required": ["content_type"]
+                      },
+                      "status": {
+                        "type": "string",
+                        "enum": ["finished_successfully"],
+                        "description": "Status of the message processing"
+                      },
+                      "end_turn": {
+                        "type": ["boolean", "null"],
+                        "description": "Whether this message ends the turn"
+                      },
+                      "weight": {
+                        "type": "number",
+                        "description": "Weight or importance of the message"
+                      },
+                      "metadata": {
+                        "type": "object",
+                        "properties": {
+                          "is_visually_hidden_from_conversation": {
+                            "type": "boolean",
+                            "description": "Whether message is hidden from conversation view"
+                          },
+                          "user_context_message_data": {
+                            "type": "object",
+                            "properties": {
+                              "about_model_message": {
+                                "type": "string",
+                                "description": "Instructions about how the model should respond"
+                              }
+                            }
+                          },
+                          "is_user_system_message": {
+                            "type": "boolean",
+                            "description": "Whether this is a user system message"
+                          },
+                          "selected_sources": {
+                            "type": "array",
+                            "description": "Array of selected sources"
+                          },
+                          "selected_github_repos": {
+                            "type": "array",
+                            "description": "Array of selected GitHub repositories"
+                          },
+                          "serialization_metadata": {
+                            "type": "object",
+                            "properties": {
+                              "custom_symbol_offsets": {
+                                "type": "array",
+                                "description": "Custom symbol offsets for serialization"
+                              }
+                            }
+                          },
+                          "request_id": {
+                            "type": "string",
+                            "description": "Unique request identifier"
+                          },
+                          "message_source": {
+                            "type": ["string", "null"],
+                            "description": "Source of the message"
+                          },
+                          "timestamp_": {
+                            "type": "string",
+                            "description": "Timestamp format indicator"
+                          },
+                          "message_type": {
+                            "type": ["string", "null"],
+                            "description": "Type of the message"
+                          },
+                          "finish_details": {
+                            "type": "object",
+                            "properties": {
+                              "type": {
+                                "type": "string",
+                                "enum": ["stop"],
+                                "description": "How the message generation finished"
+                              },
+                              "stop_tokens": {
+                                "type": "array",
+                                "items": {
+                                  "type": "number"
+                                },
+                                "description": "Stop tokens that ended generation"
+                              }
+                            }
+                          },
+                          "is_complete": {
+                            "type": "boolean",
+                            "description": "Whether the message is complete"
+                          },
+                          "citations": {
+                            "type": "array",
+                            "description": "Citations used in the message"
+                          },
+                          "content_references": {
+                            "type": "array",
+                            "description": "References to content"
+                          },
+                          "model_slug": {
+                            "type": "string",
+                            "description": "Model used for generation (e.g., gpt-4o)"
+                          },
+                          "default_model_slug": {
+                            "type": "string",
+                            "description": "Default model slug"
+                          },
+                          "parent_id": {
+                            "type": "string",
+                            "description": "ID of the parent message"
+                          }
+                        }
+                      },
+                      "recipient": {
+                        "type": "string",
+                        "enum": ["all"],
+                        "description": "Recipient of the message"
+                      },
+                      "channel": {
+                        "type": ["string", "null"],
+                        "description": "Channel information"
+                      }
+                    },
+                    "required": ["id", "author", "create_time", "update_time", "content", "status", "end_turn", "weight", "metadata", "recipient", "channel"]
+                  }
+                ]
+              },
+              "parent": {
+                "type": ["string", "null"],
+                "description": "ID of the parent node in the conversation tree"
+              },
+              "children": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Array of child node IDs"
+              }
+            },
+            "required": ["id", "message", "parent", "children"]
+          }
+        },
+        "additionalProperties": false
+      }
+    },
+    "required": ["title", "create_time", "update_time", "mapping"]
+  }
+}

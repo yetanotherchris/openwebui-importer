@@ -1,0 +1,310 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Grok Chat Export",
+  "type": "object",
+  "properties": {
+    "conversations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "conversation": {
+            "type": "object",
+            "properties": {
+              "conversation_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "user_id": {
+                "type": "string",
+                "format": "uuid"
+              },
+              "anon_user_id": {
+                "type": ["string", "null"]
+              },
+              "create_time": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "modify_time": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "system_prompt_id": {
+                "type": ["string", "null"]
+              },
+              "temporary": {
+                "type": "boolean"
+              },
+              "leaf_response_id": {
+                "type": ["string", "null"]
+              },
+              "title": {
+                "type": "string"
+              },
+              "summary": {
+                "type": "string"
+              },
+              "asset_ids": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "root_asset_id": {
+                "type": ["string", "null"]
+              },
+              "x_user_id": {
+                "type": ["string", "null"]
+              },
+              "starred": {
+                "type": ["boolean", "null"]
+              },
+              "system_prompt_name": {
+                "type": "string"
+              },
+              "media_types": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "controller": {
+                "type": ["string", "null"]
+              }
+            },
+            "required": [
+              "conversation_id",
+              "user_id",
+              "create_time",
+              "modify_time",
+              "temporary",
+              "title",
+              "summary",
+              "asset_ids",
+              "system_prompt_name",
+              "media_types"
+            ]
+          },
+          "responses": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "response": {
+                  "type": "object",
+                  "properties": {
+                    "response_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "conversation_id": {
+                      "type": "string",
+                      "format": "uuid"
+                    },
+                    "message": {
+                      "type": "string"
+                    },
+                    "sender": {
+                      "type": "string",
+                      "enum": ["human", "ASSISTANT"]
+                    },
+                    "create_time": {
+                      "type": "string",
+                      "format": "date-time"
+                    },
+                    "parent_response_id": {
+                      "type": ["string", "null"]
+                    },
+                    "manual": {
+                      "type": "boolean"
+                    },
+                    "partial": {
+                      "type": "boolean"
+                    },
+                    "shared": {
+                      "type": "boolean"
+                    },
+                    "query": {
+                      "type": ["string", "null"]
+                    },
+                    "query_type": {
+                      "type": ["string", "null"]
+                    },
+                    "web_search_results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    },
+                    "cited_web_search_results": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "url": {
+                            "type": "string",
+                            "format": "uri"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "preview": {
+                            "type": "string"
+                          },
+                          "search_engine_text": {
+                            "type": "string"
+                          },
+                          "description": {
+                            "type": "string"
+                          },
+                          "site_name": {
+                            "type": "string"
+                          },
+                          "metadata_title": {
+                            "type": "string"
+                          },
+                          "creator": {
+                            "type": "string"
+                          },
+                          "image": {
+                            "type": "string"
+                          },
+                          "favicon": {
+                            "type": "string",
+                            "format": "uri"
+                          }
+                        },
+                        "required": ["url", "title", "preview"]
+                      }
+                    },
+                    "xpost_ids": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "generated_image_urls": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "format": "uri"
+                      }
+                    },
+                    "debug_log": {
+                      "type": ["string", "null"]
+                    },
+                    "image_attachments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    },
+                    "file_attachments": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    },
+                    "card_attachments_json": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    },
+                    "is_control": {
+                      "type": "boolean"
+                    },
+                    "thinking_trace": {
+                      "type": ["string", "null"]
+                    },
+                    "steps": {
+                      "type": "array",
+                      "items": {
+                        "type": "object"
+                      }
+                    },
+                    "image_edit_uri": {
+                      "type": ["string", "null"]
+                    },
+                    "xai_user_id": {
+                      "type": "string"
+                    },
+                    "xai_anon_user_id": {
+                      "type": ["string", "null"]
+                    },
+                    "error": {
+                      "type": ["object", "null"]
+                    },
+                    "media_types": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
+                    "webpage_urls": {
+                      "type": "array",
+                      "items": {
+                        "type": "string",
+                        "format": "uri"
+                      }
+                    },
+                    "metadata": {
+                      "type": "object",
+                      "properties": {
+                        "requestModelDetails": {
+                          "type": "object",
+                          "properties": {
+                            "modelId": {
+                              "type": "string"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "thinking_start_time": {
+                      "type": ["string", "null"],
+                      "format": "date-time"
+                    },
+                    "thinking_end_time": {
+                      "type": ["string", "null"],
+                      "format": "date-time"
+                    }
+                  },
+                  "required": [
+                    "response_id",
+                    "conversation_id",
+                    "message",
+                    "sender",
+                    "create_time",
+                    "manual",
+                    "partial",
+                    "shared",
+                    "web_search_results",
+                    "cited_web_search_results",
+                    "xpost_ids",
+                    "generated_image_urls",
+                    "image_attachments",
+                    "file_attachments",
+                    "card_attachments_json",
+                    "is_control",
+                    "steps",
+                    "xai_user_id",
+                    "media_types",
+                    "webpage_urls"
+                  ]
+                },
+                "share_link": {
+                  "type": ["string", "null"]
+                }
+              },
+              "required": ["response"]
+            }
+          }
+        },
+        "required": ["conversation", "responses"]
+      }
+    }
+  },
+  "required": ["conversations"]
+}

@@ -1,0 +1,33 @@
+{
+  "meta": {
+    "exported_at": "2024-03-19 16:03:09",
+    "title": "Chat Title"
+  },
+  "chats": [
+    {
+      "index": 0,
+      "type": "prompt",
+      "message": [
+        {
+          "type": "p",
+          "data": "Message content"
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "type": "response", 
+      "message": [
+        {
+          "type": "p",
+          "data": "Response content"
+        },
+        {
+          "type": "pre",
+          "language": "javascript",
+          "data": "Code block content"
+        }
+      ]
+    }
+  ]
+}
