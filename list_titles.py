@@ -80,13 +80,22 @@ def detect_format(
         # Heuristic detection for ChatGPT array exports
         if data and isinstance(data[0], dict):
             item = data[0]
-            if any(k in item for k in ("mapping", "chat_messages")):
+            if "mapping" in item:
+                return "ChatGPT"
+            if "chat_messages" in item and "uuid" not in item:
                 return "ChatGPT"
             if (
                 ("title" in item or "name" in item)
                 and any(k in item for k in ("create_time", "update_time"))
             ):
                 return "ChatGPT"
+
+            # Claude array exports contain uuid and chat_messages fields
+            if {
+                "uuid",
+                "chat_messages",
+            }.issubset(item.keys()):
+                return "Claude"
 
     # Grok exports are objects; validate against the Grok schema.
     if isinstance(data, dict):
@@ -103,6 +112,11 @@ def detect_format(
             return "Claude"
 
         if "conversations" in data:
+            conversations = data.get("conversations")
+            if isinstance(conversations, list) and conversations:
+                first = conversations[0]
+                if isinstance(first, dict) and {"conversation", "responses"}.issubset(first.keys()):
+                    return "Claude"
             return "Grok"
 
         # ChatGPT single conversation heuristic fallback
@@ -144,10 +158,26 @@ def load_titles(
             if t:
                 titles.append(t)
     elif fmt == 'Claude':
-        meta = data.get('meta', {}) if isinstance(data, dict) else {}
-        t = meta.get('title')
-        if t:
-            titles.append(t)
+        if isinstance(data, list):
+            for item in data:
+                if not isinstance(item, dict):
+                    continue
+                t = item.get('name') or item.get('title')
+                if t:
+                    titles.append(t)
+        elif isinstance(data, dict):
+            meta = data.get('meta', {})
+            t = meta.get('title')
+            if t:
+                titles.append(t)
+            if 'conversations' in data and isinstance(data['conversations'], list):
+                for conv in data['conversations']:
+                    if not isinstance(conv, dict):
+                        continue
+                    if 'conversation' in conv and isinstance(conv['conversation'], dict):
+                        name = conv['conversation'].get('title') or conv['conversation'].get('name')
+                        if name:
+                            titles.append(name)
     elif fmt == 'Grok':
         if 'conversations' in data and isinstance(data['conversations'], list):
             for conv in data['conversations']:
@@ -210,8 +240,27 @@ def load_titles_and_times(
         elif isinstance(data, dict):
             add(data.get('title') or data.get('name'), data.get('create_time') or data.get('update_time'))
     elif fmt == 'Claude':
-        meta = data.get('meta', {}) if isinstance(data, dict) else {}
-        add(meta.get('title'), meta.get('exported_at'))
+        if isinstance(data, list):
+            for item in data:
+                if not isinstance(item, dict):
+                    continue
+                add(
+                    item.get('name') or item.get('title'),
+                    item.get('created_at') or item.get('updated_at'),
+                )
+        elif isinstance(data, dict):
+            meta = data.get('meta', {})
+            add(meta.get('title'), meta.get('exported_at'))
+            if 'conversations' in data and isinstance(data['conversations'], list):
+                for conv in data['conversations']:
+                    if not isinstance(conv, dict):
+                        continue
+                    if 'conversation' in conv and isinstance(conv['conversation'], dict):
+                        obj = conv['conversation']
+                        add(
+                            obj.get('title') or obj.get('name'),
+                            obj.get('created_at') or obj.get('updated_at'),
+                        )
     elif fmt == 'Grok':
         if 'conversations' in data and isinstance(data['conversations'], list):
             for conv in data['conversations']:
