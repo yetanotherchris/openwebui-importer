@@ -15,5 +15,9 @@ The script supports Grok, Claude, and ChatGPT exports and will report
 the detected format for each file before listing its titles. Titles are
 shown with their timestamps unless you pass `--no-dates`.
 
-`list_titles.py` relies on the `jsonschema` package which can be installed
-with `pip install jsonschema`.
+The script depends on the `jsonschema` package. Install the required
+dependencies with:
+
+```bash
+pip install -r requirements.txt
+```
