@@ -11,4 +11,6 @@ python list_titles.py <export.json> [more.json ...]
 ```
 
 The script supports Grok, Claude, and ChatGPT exports and will report
-the detected format for each file before listing its titles.
+the detected format for each file before listing its titles. After
+listing the titles, the script can optionally print the timestamp of
+each chat when you answer `y` to the prompt.
