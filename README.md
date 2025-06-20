@@ -16,8 +16,10 @@ the detected format for each file before listing its titles. Detection
 normally relies on quick heuristics. Pass `--validate` to enforce JSON
 schema validation which is slower. If you already know the export
 format you can pass `--format Grok`, `--format ChatGPT`, or
-`--format Claude` to skip detection. Titles are shown with their
-timestamps unless you pass `--no-dates`.
+`--format Claude` to skip detection. Claude exports can be either a
+list of conversations or an object containing `meta` and `conversations`
+data. Titles are shown with their timestamps unless you pass
+`--no-dates`.
 
 The script depends on the `jsonschema` package. Install the required
 dependencies with:
