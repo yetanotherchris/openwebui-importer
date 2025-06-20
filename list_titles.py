@@ -1,5 +1,5 @@
+import argparse
 import json
-import sys
 from datetime import datetime
 from typing import Any, List, Tuple, Optional
 
@@ -11,6 +11,15 @@ def ordinal(n: int) -> str:
     else:
         suffix = {1: "st", 2: "nd", 3: "rd"}.get(n % 10, "th")
     return f"{n}{suffix}"
+
+
+def format_human_date(dt: datetime) -> str:
+    """Return a human-readable date like 'Mon 23rd June 2025'."""
+    weekday = dt.strftime("%a")
+    day = ordinal(dt.day)
+    month = dt.strftime("%B")
+    year = dt.year
+    return f"{weekday} {day} {month} {year}"
 
 
 def detect_format(data: Any) -> str:
@@ -130,33 +139,31 @@ def load_titles_and_times(path: str) -> Tuple[str, List[Tuple[str, Optional[date
     return fmt, results
 
 
-def main():
-    if len(sys.argv) < 2:
-        print('Usage: python list_titles.py <export.json> [more.json ...]')
-        sys.exit(1)
+def main() -> None:
+    parser = argparse.ArgumentParser(description="List chat titles from export files")
+    parser.add_argument("files", nargs="+", help="Chat export JSON files")
+    parser.add_argument(
+        "--no-dates",
+        action="store_true",
+        help="Only print titles without their timestamps",
+    )
+    args = parser.parse_args()
 
-    files: List[Tuple[str, str, List[Tuple[str, Optional[datetime]]]]] = []
-
-    for path in sys.argv[1:]:
+    for path in args.files:
         try:
             source, info = load_titles_and_times(path)
         except Exception as e:
             print(f"{path}: failed to parse - {e}")
             continue
-        files.append((path, source, info))
-        print(f"{path} ({source}):")
-        for title, _ in sorted(info, key=lambda x: x[0]):
-            print(f"  - {title}")
 
-    answer = input("Show chat timestamps? [y/N]: ").strip().lower()
-    if answer.startswith('y'):
-        for path, source, info in files:
-            print(f"{path} ({source}) timestamps:")
-            for title, ts in sorted(info, key=lambda x: x[0]):
-                if ts is None:
-                    print(f"  - {title}: n/a")
-                else:
-                    print(f"  - {title}: {ts.isoformat(sep=' ', timespec='seconds')}")
+        print(f"{path} ({source}):")
+
+        for title, ts in sorted(info, key=lambda x: x[0]):
+            if args.no_dates or ts is None:
+                print(f'  - "{title}"')
+            else:
+                date_str = format_human_date(ts)
+                print(f'  - {date_str}: "{title}"')
 
 
 if __name__ == '__main__':
