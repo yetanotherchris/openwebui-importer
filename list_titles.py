@@ -1,5 +1,18 @@
 import argparse
 import json
+import os
+from jsonschema import validate, ValidationError
+
+SCHEMA_DIR = os.path.join(os.path.dirname(__file__), "schemas")
+
+with open(os.path.join(SCHEMA_DIR, "chatgpt-schema.json"), "r", encoding="utf-8") as f:
+    CHATGPT_SCHEMA = json.load(f)
+
+with open(os.path.join(SCHEMA_DIR, "grok-schema.json"), "r", encoding="utf-8") as f:
+    GROK_SCHEMA = json.load(f)
+
+with open(os.path.join(SCHEMA_DIR, "claude-schema.json"), "r", encoding="utf-8") as f:
+    CLAUDE_SCHEMA_EXAMPLE = json.load(f)
 from datetime import datetime
 from typing import Any, List, Tuple, Optional
 
@@ -23,21 +36,41 @@ def format_human_date(dt: datetime) -> str:
 
 
 def detect_format(data: Any) -> str:
-    """Return the detected chat export format."""
+    """Return the detected chat export format using bundled JSON schemas."""
+
+    # First try validating against the ChatGPT schema which expects an array of
+    # conversations. Some exports may be a single conversation object, so we
+    # only validate when a list is provided.
     if isinstance(data, list):
-        return 'ChatGPT'
+        try:
+            validate(instance=data, schema=CHATGPT_SCHEMA)
+            return "ChatGPT"
+        except ValidationError:
+            pass
 
+    # Grok exports are objects; validate against the Grok schema.
     if isinstance(data, dict):
-        if 'meta' in data and 'chats' in data:
-            return 'Claude'
-        if 'conversations' in data:
-            return 'Grok'
-        if 'title' in data and 'mapping' in data:
-            return 'Grok'
-        if 'name' in data and 'chat_messages' in data:
-            return 'ChatGPT'
+        try:
+            validate(instance=data, schema=GROK_SCHEMA)
+            return "Grok"
+        except ValidationError:
+            pass
 
-    raise ValueError('Unknown export format')
+        # Claude currently ships with an example file instead of a formal JSON
+        # schema. Detect it by checking for the keys we see in that example.
+        if "meta" in data and "chats" in data:
+            return "Claude"
+
+        if "conversations" in data:
+            return "Grok"
+
+        # ChatGPT single conversation heuristic fallback
+        if "title" in data and "mapping" in data:
+            return "ChatGPT"
+        if "name" in data and "chat_messages" in data:
+            return "ChatGPT"
+
+    raise ValueError("Unknown export format")
 
 
 def load_titles(path: str) -> Tuple[str, List[str]]:
