@@ -10,21 +10,29 @@ pip install -r requirements.txt
 
 ## Scripts
 
-### convert.py
+
+### convert_chatgpt.py
 
 ```
-usage: convert.py [-h] --userid USERID [--output-dir OUTPUT_DIR] files [files ...]
+usage: convert_chatgpt.py [-h] --userid USERID [--output-dir OUTPUT_DIR] files [files ...]
 
-Convert chat exports to open-webui JSON
+Convert ChatGPT exports to open-webui JSON
+```
 
-positional arguments:
-  files                 Chat export JSON files
+### convert_grok.py
 
-options:
-  -h, --help            show this help message and exit
-  --userid USERID       User ID for output files
-  --output-dir OUTPUT_DIR
-                        Directory for output JSON files
+```
+usage: convert_grok.py [-h] --userid USERID [--output-dir OUTPUT_DIR] files [files ...]
+
+Convert Grok exports to open-webui JSON
+```
+
+### convert_claude.py
+
+```
+usage: convert_claude.py [-h] --userid USERID [--output-dir OUTPUT_DIR] files [files ...]
+
+Convert Claude exports to open-webui JSON
 ```
 
 ### create_sql.py
@@ -54,9 +62,9 @@ Output will be saved as <input_file>_schema.json
 
 1. Create an export from Claude, ChatGPT or Grok.
 2. Unzip the archive and locate the JSON file (for Grok this is `prod-grok-backend.json`).
-3. Convert the export to open-webui JSON:
+3. Convert the export to open-webui JSON using the appropriate script:
    ```bash
-   python ./convert.py --userid="d95194d2-9cef-4387-8ee4-b82eb2e1c637" ./grok.json
+   python ./convert_grok.py --userid="d95194d2-9cef-4387-8ee4-b82eb2e1c637" ./grok.json
    ```
 4. Generate SQL statements from the converted JSON files:
    ```bash
