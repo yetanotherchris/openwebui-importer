@@ -149,22 +149,69 @@ def parse_chatgpt(data: Any) -> List[dict]:
     return result
 
 
+def _parse_message_list(msgs: list[Any], default_ts: float) -> List[Tuple[str, str, float]]:
+    """Convert a list of Claude message objects into tuples."""
+    parsed: List[Tuple[str, str, float]] = []
+    for idx, msg in enumerate(msgs):
+        if not isinstance(msg, dict):
+            continue
+        text = msg.get("text")
+        if not text and isinstance(msg.get("content"), list):
+            parts = [p.get("text", "") for p in msg.get("content", [])]
+            text = "".join(parts)
+        if not text:
+            continue
+        role = msg.get("role") or msg.get("sender")
+        if role not in {"user", "assistant"}:
+            role = "assistant" if idx % 2 else "user"
+        ts_val = msg.get("created_at") or msg.get("updated_at") or default_ts
+        try:
+            ts_val = float(ts_val)
+        except (TypeError, ValueError):
+            ts_val = default_ts
+        parsed.append((role, text, ts_val))
+    return parsed
+
+
 def parse_claude(data: Any) -> List[dict]:
-    convs = data.get("conversations") if isinstance(data, dict) else data
+    if isinstance(data, dict):
+        if "chats" in data:
+            convs = data.get("chats")
+        else:
+            convs = data.get("conversations")
+    else:
+        convs = data
     if not isinstance(convs, list):
-        convs = [data]
+        convs = [convs]
+
     result = []
     for item in convs:
-        conv = item.get("conversation", {}) if isinstance(item, dict) else {}
-        title = conv.get("title") or item.get("name") or "Untitled"
-        ts = conv.get("created_at") or conv.get("updated_at") or time.time()
-        resp = ""
-        if isinstance(item.get("responses"), list) and item["responses"]:
-            resp = item["responses"][0].get("response", {}).get("text", "")
-        messages = [("user", title, ts)]
-        if resp:
-            messages.append(("assistant", resp, ts))
+        conv = item.get("conversation", item) if isinstance(item, dict) else {}
+        title = conv.get("title") or item.get("name") or item.get("title") or "Untitled"
+        ts = (
+            conv.get("created_at")
+            or conv.get("updated_at")
+            or item.get("created_at")
+            or item.get("updated_at")
+            or time.time()
+        )
+
+        messages: List[Tuple[str, str, float]] = []
+        if isinstance(item.get("chat_messages"), list):
+            messages.extend(_parse_message_list(item["chat_messages"], ts))
+        elif isinstance(conv.get("messages"), list):
+            messages.extend(_parse_message_list(conv["messages"], ts))
+        elif isinstance(item.get("responses"), list):
+            messages.append(("user", title, ts))
+            for resp in item["responses"]:
+                text = resp.get("response", {}).get("text")
+                if text:
+                    messages.append(("assistant", text, ts))
+        else:
+            messages.append(("user", title, ts))
+
         result.append({"title": title, "timestamp": ts, "messages": messages})
+
     return result
 
 
