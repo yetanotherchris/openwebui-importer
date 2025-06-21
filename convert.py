@@ -95,8 +95,20 @@ def detect_format(
 
 
 def extract_last_sentence(text: str) -> str:
-    sentences = re.split(r"(?<=[.!?])\s+", text.strip())
-    return sentences[-1] if sentences else text
+    """Return the last sentence of ``text``.
+
+    Falls back to the last non-empty line if no sentence ending
+    punctuation is found.
+    """
+    cleaned = text.strip()
+    if not cleaned:
+        return ""
+    matches = re.findall(r"[^.!?]*[.!?]", cleaned, flags=re.DOTALL)
+    if matches:
+        return matches[-1].strip()
+    # No punctuation; use the last non-empty line
+    lines = [ln.strip() for ln in cleaned.splitlines() if ln.strip()]
+    return lines[-1] if lines else cleaned
 
 
 def parse_chatgpt(data: Any) -> List[dict]:
@@ -180,8 +192,8 @@ def parse_grok(data: Any) -> List[dict]:
     return result
 
 
-def build_webui(conversation: dict, fmt: str, user_id: str) -> Dict[str, Any]:
-    conv_id = str(uuid.uuid4())
+def build_webui(conversation: dict, fmt: str, user_id: str) -> Tuple[Dict[str, Any], str]:
+    conv_uuid = str(uuid.uuid4())
     model = MODEL_MAP[fmt]
     model_name = MODEL_NAME_MAP[fmt]
     messages_map: Dict[str, Any] = {}
@@ -215,7 +227,7 @@ def build_webui(conversation: dict, fmt: str, user_id: str) -> Dict[str, Any]:
         messages_list.append(msg)
         prev_id = msg_id
     webui = {
-        "id": conv_id,
+        "id": "",
         "title": conversation["title"],
         "models": [model],
         "params": {},
@@ -227,7 +239,7 @@ def build_webui(conversation: dict, fmt: str, user_id: str) -> Dict[str, Any]:
     }
     if user_id:
         webui["userId"] = user_id
-    return webui
+    return webui, conv_uuid
 
 
 def slugify(text: str) -> str:
@@ -250,8 +262,8 @@ def convert_file(path: str, user_id: str, outdir: str) -> None:
         raise ValueError("Unsupported format")
     os.makedirs(outdir, exist_ok=True)
     for conv in conversations:
-        out = build_webui(conv, fmt, user_id)
-        fname = f"{slugify(conv['title'])}_{out['id']}.json"
+        out, conv_uuid = build_webui(conv, fmt, user_id)
+        fname = f"{slugify(conv['title'])}_{conv_uuid}.json"
         with open(os.path.join(outdir, fname), "w", encoding="utf-8") as fh:
             json.dump(out, fh, ensure_ascii=False, indent=2)
 
