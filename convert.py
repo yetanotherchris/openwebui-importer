@@ -4,6 +4,7 @@ import os
 import re
 import time
 import uuid
+from datetime import datetime
 from typing import Any, Dict, List, Tuple
 from jsonschema import validate, ValidationError
 
@@ -111,6 +112,22 @@ def extract_last_sentence(text: str) -> str:
     return lines[-1] if lines else cleaned
 
 
+def parse_timestamp(value: Any, default: float) -> float:
+    """Convert ``value`` to a Unix timestamp.
+
+    ``value`` may be a number or an ISO 8601 formatted string. Any parsing
+    errors fall back to ``default``.
+    """
+    if isinstance(value, (int, float)):
+        return float(value)
+    if isinstance(value, str):
+        try:
+            return datetime.fromisoformat(value.replace("Z", "+00:00")).timestamp()
+        except ValueError:
+            pass
+    return default
+
+
 def parse_chatgpt(data: Any) -> List[dict]:
     conversations = data if isinstance(data, list) else [data]
     result = []
@@ -118,7 +135,8 @@ def parse_chatgpt(data: Any) -> List[dict]:
         if not isinstance(item, dict):
             continue
         title = item.get("title") or item.get("name") or "Untitled"
-        ts = item.get("create_time") or item.get("update_time") or time.time()
+        ts_raw = item.get("create_time") or item.get("update_time") or time.time()
+        ts = parse_timestamp(ts_raw, time.time())
         messages: List[Tuple[str, str, float]] = []
         if isinstance(item.get("chat_messages"), list):
             for idx, msg in enumerate(item["chat_messages"]):
@@ -165,10 +183,7 @@ def _parse_message_list(msgs: list[Any], default_ts: float) -> List[Tuple[str, s
         if role not in {"user", "assistant"}:
             role = "assistant" if idx % 2 else "user"
         ts_val = msg.get("created_at") or msg.get("updated_at") or default_ts
-        try:
-            ts_val = float(ts_val)
-        except (TypeError, ValueError):
-            ts_val = default_ts
+        ts_val = parse_timestamp(ts_val, default_ts)
         parsed.append((role, text, ts_val))
     return parsed
 
@@ -188,13 +203,14 @@ def parse_claude(data: Any) -> List[dict]:
     for item in convs:
         conv = item.get("conversation", item) if isinstance(item, dict) else {}
         title = conv.get("title") or item.get("name") or item.get("title") or "Untitled"
-        ts = (
+        ts_raw = (
             conv.get("created_at")
             or conv.get("updated_at")
             or item.get("created_at")
             or item.get("updated_at")
             or time.time()
         )
+        ts = parse_timestamp(ts_raw, time.time())
 
         messages: List[Tuple[str, str, float]] = []
         if isinstance(item.get("chat_messages"), list):
@@ -221,7 +237,8 @@ def parse_grok(data: Any) -> List[dict]:
     for item in convs:
         obj = item.get("conversation", item)
         title = obj.get("title") or "Untitled"
-        ts = obj.get("create_time") or obj.get("modify_time") or time.time()
+        ts_raw = obj.get("create_time") or obj.get("modify_time") or time.time()
+        ts = parse_timestamp(ts_raw, time.time())
         mapping = item.get("mapping") or obj.get("mapping") or data.get("mapping")
         messages: List[Tuple[str, str, float]] = []
         if isinstance(mapping, dict):
