@@ -1,0 +1,151 @@
+{
+  "id": "",
+  "title": "What causes rainbows?",
+  "models": [
+    "openai/chatgpt-4o-latest"
+  ],
+  "params": {},
+  "history": {
+    "messages": {
+      "00000000-0000-0000-0000-000000000002": {
+        "id": "00000000-0000-0000-0000-000000000002",
+        "parentId": null,
+        "childrenIds": [
+          "00000000-0000-0000-0000-000000000003"
+        ],
+        "role": "user",
+        "content": "What causes rainbows to appear in the sky?",
+        "timestamp": 1234567890,
+        "models": [
+          "openai/chatgpt-4o-latest"
+        ]
+      },
+      "00000000-0000-0000-0000-000000000003": {
+        "id": "00000000-0000-0000-0000-000000000003",
+        "parentId": "00000000-0000-0000-0000-000000000002",
+        "childrenIds": [
+          "00000000-0000-0000-0000-000000000004"
+        ],
+        "role": "assistant",
+        "content": "Rainbows are formed when sunlight passes through raindrops, which act as prisms and split the light into its different colors.",
+        "timestamp": 1234567890,
+        "model": "openai/chatgpt-4o-latest",
+        "modelName": "ChatGPT 4o (latest)",
+        "modelIdx": 0,
+        "userContext": null,
+        "lastSentence": "Rainbows are formed when sunlight passes through raindrops, which act as prisms and split the light into its different colors.",
+        "usage": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "total_tokens": 0
+        },
+        "done": true
+      },
+      "00000000-0000-0000-0000-000000000004": {
+        "id": "00000000-0000-0000-0000-000000000004",
+        "parentId": "00000000-0000-0000-0000-000000000003",
+        "childrenIds": [
+          "00000000-0000-0000-0000-000000000005"
+        ],
+        "role": "user",
+        "content": "Can animals see rainbows?",
+        "timestamp": 1234567890,
+        "models": [
+          "openai/chatgpt-4o-latest"
+        ]
+      },
+      "00000000-0000-0000-0000-000000000005": {
+        "id": "00000000-0000-0000-0000-000000000005",
+        "parentId": "00000000-0000-0000-0000-000000000004",
+        "childrenIds": [],
+        "role": "assistant",
+        "content": "Many animals can perceive some colors but not all; they may not see rainbows in the same way humans do.",
+        "timestamp": 1234567890,
+        "model": "openai/chatgpt-4o-latest",
+        "modelName": "ChatGPT 4o (latest)",
+        "modelIdx": 0,
+        "userContext": null,
+        "lastSentence": "Many animals can perceive some colors but not all; they may not see rainbows in the same way humans do.",
+        "usage": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "total_tokens": 0
+        },
+        "done": true
+      }
+    },
+    "currentId": "00000000-0000-0000-0000-000000000005"
+  },
+  "messages": [
+    {
+      "id": "00000000-0000-0000-0000-000000000002",
+      "parentId": null,
+      "childrenIds": [
+        "00000000-0000-0000-0000-000000000003"
+      ],
+      "role": "user",
+      "content": "What causes rainbows to appear in the sky?",
+      "timestamp": 1234567890,
+      "models": [
+        "openai/chatgpt-4o-latest"
+      ]
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000003",
+      "parentId": "00000000-0000-0000-0000-000000000002",
+      "childrenIds": [
+        "00000000-0000-0000-0000-000000000004"
+      ],
+      "role": "assistant",
+      "content": "Rainbows are formed when sunlight passes through raindrops, which act as prisms and split the light into its different colors.",
+      "timestamp": 1234567890,
+      "model": "openai/chatgpt-4o-latest",
+      "modelName": "ChatGPT 4o (latest)",
+      "modelIdx": 0,
+      "userContext": null,
+      "lastSentence": "Rainbows are formed when sunlight passes through raindrops, which act as prisms and split the light into its different colors.",
+      "usage": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "total_tokens": 0
+      },
+      "done": true
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000004",
+      "parentId": "00000000-0000-0000-0000-000000000003",
+      "childrenIds": [
+        "00000000-0000-0000-0000-000000000005"
+      ],
+      "role": "user",
+      "content": "Can animals see rainbows?",
+      "timestamp": 1234567890,
+      "models": [
+        "openai/chatgpt-4o-latest"
+      ]
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000005",
+      "parentId": "00000000-0000-0000-0000-000000000004",
+      "childrenIds": [],
+      "role": "assistant",
+      "content": "Many animals can perceive some colors but not all; they may not see rainbows in the same way humans do.",
+      "timestamp": 1234567890,
+      "model": "openai/chatgpt-4o-latest",
+      "modelName": "ChatGPT 4o (latest)",
+      "modelIdx": 0,
+      "userContext": null,
+      "lastSentence": "Many animals can perceive some colors but not all; they may not see rainbows in the same way humans do.",
+      "usage": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "total_tokens": 0
+      },
+      "done": true
+    }
+  ],
+  "tags": [],
+  "timestamp": 1234567890000,
+  "files": [],
+  "userId": "user"
+}
