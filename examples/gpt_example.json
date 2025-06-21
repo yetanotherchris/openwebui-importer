@@ -1,35 +1,520 @@
-{
-  "name": "What causes rainbows?",
-  "chat_messages": [
+[
     {
-      "text": "What causes rainbows to appear in the sky?",
-      "content": [
-        {
-          "text": "What causes rainbows to appear in the sky?"
-        }
-      ]
-    },
-    {
-      "text": "Rainbows are formed when sunlight passes through raindrops, which act as prisms and split the light into its different colors.",
-      "content": [
-        {
-          "text": "Rainbows are formed when sunlight passes through raindrops, which act as prisms and split the light into its different colors."
-        }
-      ]
-    },
-    {
-      "text": "Can animals see rainbows?",
-      "content": [
-        {"text": "Can animals see rainbows?"}
-      ]
-    },
-    {
-      "text": "Many animals can perceive some colors but not all; they may not see rainbows in the same way humans do.",
-      "content": [
-        {
-          "text": "Many animals can perceive some colors but not all; they may not see rainbows in the same way humans do."
-        }
-      ]
+        "title": "How photosynthesis works",
+        "create_time": 1750537482.970556,
+        "update_time": 1750537534.231514,
+        "mapping": {
+            "client-created-root": {
+                "id": "client-created-root",
+                "message": null,
+                "parent": null,
+                "children": [
+                    "e5529cf9-c042-40ea-aba9-f90efa479c28"
+                ]
+            },
+            "e5529cf9-c042-40ea-aba9-f90efa479c28": {
+                "id": "e5529cf9-c042-40ea-aba9-f90efa479c28",
+                "message": {
+                    "id": "e5529cf9-c042-40ea-aba9-f90efa479c28",
+                    "author": {
+                        "role": "system",
+                        "name": null,
+                        "metadata": {}
+                    },
+                    "create_time": null,
+                    "update_time": null,
+                    "content": {
+                        "content_type": "text",
+                        "parts": [
+                            ""
+                        ]
+                    },
+                    "status": "finished_successfully",
+                    "end_turn": true,
+                    "weight": 0.0,
+                    "metadata": {
+                        "is_visually_hidden_from_conversation": true
+                    },
+                    "recipient": "all",
+                    "channel": null
+                },
+                "parent": "client-created-root",
+                "children": [
+                    "a021bc5d-b3f2-4120-a182-c00058472c7b"
+                ]
+            },
+            "a021bc5d-b3f2-4120-a182-c00058472c7b": {
+                "id": "a021bc5d-b3f2-4120-a182-c00058472c7b",
+                "message": {
+                    "id": "a021bc5d-b3f2-4120-a182-c00058472c7b",
+                    "author": {
+                        "role": "user",
+                        "name": null,
+                        "metadata": {}
+                    },
+                    "create_time": null,
+                    "update_time": null,
+                    "content": {
+                        "content_type": "user_editable_context",
+                        "user_profile": "",
+                        "user_instructions": "The user provided the additional info about how they would like you to respond:\n```Please keep the initial response to 1 to 2 paragraphs, and say if I want a more detailed answer as a follow up, then I should ask. Get right to the point. Always be respectful.  Be humble when appropriate.```"
+                    },
+                    "status": "finished_successfully",
+                    "end_turn": null,
+                    "weight": 1.0,
+                    "metadata": {
+                        "is_visually_hidden_from_conversation": true,
+                        "user_context_message_data": {
+                            "about_model_message": "Please keep the initial response to 1 to 2 paragraphs, and say if I want a more detailed answer as a follow up, then I should ask. Get right to the point. Always be respectful.  Be humble when appropriate."
+                        },
+                        "is_user_system_message": true
+                    },
+                    "recipient": "all",
+                    "channel": null
+                },
+                "parent": "e5529cf9-c042-40ea-aba9-f90efa479c28",
+                "children": [
+                    "4a718348-3eb5-4e00-a464-38417f6cb252"
+                ]
+            },
+            "4a718348-3eb5-4e00-a464-38417f6cb252": {
+                "id": "4a718348-3eb5-4e00-a464-38417f6cb252",
+                "message": {
+                    "id": "4a718348-3eb5-4e00-a464-38417f6cb252",
+                    "author": {
+                        "role": "user",
+                        "name": null,
+                        "metadata": {}
+                    },
+                    "create_time": 1750537483.102,
+                    "update_time": null,
+                    "content": {
+                        "content_type": "text",
+                        "parts": [
+                            "Can you explain how photosynthesis works in simple terms?"
+                        ]
+                    },
+                    "status": "finished_successfully",
+                    "end_turn": null,
+                    "weight": 1.0,
+                    "metadata": {
+                        "selected_sources": [],
+                        "selected_github_repos": [],
+                        "serialization_metadata": {
+                            "custom_symbol_offsets": []
+                        },
+                        "request_id": "95363b2309c09511-LHR",
+                        "message_source": null,
+                        "timestamp_": "absolute",
+                        "message_type": null
+                    },
+                    "recipient": "all",
+                    "channel": null
+                },
+                "parent": "a021bc5d-b3f2-4120-a182-c00058472c7b",
+                "children": [
+                    "5558dbfd-0327-4905-bb66-e54b32e926b0"
+                ]
+            },
+            "5558dbfd-0327-4905-bb66-e54b32e926b0": {
+                "id": "5558dbfd-0327-4905-bb66-e54b32e926b0",
+                "message": {
+                    "id": "5558dbfd-0327-4905-bb66-e54b32e926b0",
+                    "author": {
+                        "role": "assistant",
+                        "name": null,
+                        "metadata": {}
+                    },
+                    "create_time": 1750537483.023421,
+                    "update_time": null,
+                    "content": {
+                        "content_type": "text",
+                        "parts": [
+                            "Photosynthesis is the process plants use to make their own food. They take in sunlight, carbon dioxide (from the air), and water (from the soil). Using sunlight as energy, they convert these into glucose (a type of sugar) and oxygen. The glucose gives the plant energy to grow, and the oxygen is released into the air.\n\nIf you want a more detailed explanation, including the specific steps or chemical reactions involved, just let me know."
+                        ]
+                    },
+                    "status": "finished_successfully",
+                    "end_turn": true,
+                    "weight": 1.0,
+                    "metadata": {
+                        "finish_details": {
+                            "type": "stop",
+                            "stop_tokens": [
+                                200002
+                            ]
+                        },
+                        "is_complete": true,
+                        "citations": [],
+                        "content_references": [],
+                        "message_type": null,
+                        "model_slug": "gpt-4o",
+                        "default_model_slug": "gpt-4o",
+                        "parent_id": "4a718348-3eb5-4e00-a464-38417f6cb252",
+                        "request_id": "95363b2309c09511-LHR",
+                        "timestamp_": "absolute"
+                    },
+                    "recipient": "all",
+                    "channel": null
+                },
+                "parent": "4a718348-3eb5-4e00-a464-38417f6cb252",
+                "children": [
+                    "f9db4d2b-f2be-4eae-bad2-b8f805fb55c1"
+                ]
+            },
+            "f9db4d2b-f2be-4eae-bad2-b8f805fb55c1": {
+                "id": "f9db4d2b-f2be-4eae-bad2-b8f805fb55c1",
+                "message": {
+                    "id": "f9db4d2b-f2be-4eae-bad2-b8f805fb55c1",
+                    "author": {
+                        "role": "user",
+                        "name": null,
+                        "metadata": {}
+                    },
+                    "create_time": 1750537499.558,
+                    "update_time": null,
+                    "content": {
+                        "content_type": "text",
+                        "parts": [
+                            "Why is sunlight important?"
+                        ]
+                    },
+                    "status": "finished_successfully",
+                    "end_turn": null,
+                    "weight": 1.0,
+                    "metadata": {
+                        "selected_sources": [],
+                        "selected_github_repos": [],
+                        "serialization_metadata": {
+                            "custom_symbol_offsets": []
+                        },
+                        "request_id": "95363b89b8e39511-LHR",
+                        "message_source": null,
+                        "timestamp_": "absolute",
+                        "message_type": null
+                    },
+                    "recipient": "all",
+                    "channel": null
+                },
+                "parent": "5558dbfd-0327-4905-bb66-e54b32e926b0",
+                "children": [
+                    "0bb3750d-4450-40b9-8961-d6bfe6dc55aa"
+                ]
+            },
+            "0bb3750d-4450-40b9-8961-d6bfe6dc55aa": {
+                "id": "0bb3750d-4450-40b9-8961-d6bfe6dc55aa",
+                "message": {
+                    "id": "0bb3750d-4450-40b9-8961-d6bfe6dc55aa",
+                    "author": {
+                        "role": "assistant",
+                        "name": null,
+                        "metadata": {}
+                    },
+                    "create_time": 1750537499.477939,
+                    "update_time": null,
+                    "content": {
+                        "content_type": "text",
+                        "parts": [
+                            "Sunlight is important in photosynthesis because it provides the energy plants need to convert carbon dioxide and water into glucose. Without sunlight, the plant can't power this process, so it can't make food or grow.\n\nIf you\u2019d like to know how light energy is captured and used at the molecular level, feel free to ask."
+                        ]
+                    },
+                    "status": "finished_successfully",
+                    "end_turn": true,
+                    "weight": 1.0,
+                    "metadata": {
+                        "finish_details": {
+                            "type": "stop",
+                            "stop_tokens": [
+                                200002
+                            ]
+                        },
+                        "is_complete": true,
+                        "citations": [],
+                        "content_references": [],
+                        "message_type": null,
+                        "model_slug": "gpt-4o",
+                        "default_model_slug": "gpt-4o",
+                        "parent_id": "f9db4d2b-f2be-4eae-bad2-b8f805fb55c1",
+                        "request_id": "95363b89b8e39511-LHR",
+                        "timestamp_": "absolute"
+                    },
+                    "recipient": "all",
+                    "channel": null
+                },
+                "parent": "f9db4d2b-f2be-4eae-bad2-b8f805fb55c1",
+                "children": [
+                    "a73ae65c-059e-4ba9-818a-c99d801bd029"
+                ]
+            },
+            "a73ae65c-059e-4ba9-818a-c99d801bd029": {
+                "id": "a73ae65c-059e-4ba9-818a-c99d801bd029",
+                "message": {
+                    "id": "a73ae65c-059e-4ba9-818a-c99d801bd029",
+                    "author": {
+                        "role": "user",
+                        "name": null,
+                        "metadata": {}
+                    },
+                    "create_time": 1750537510.653,
+                    "update_time": null,
+                    "content": {
+                        "content_type": "text",
+                        "parts": [
+                            "What is an ecosystem"
+                        ]
+                    },
+                    "status": "finished_successfully",
+                    "end_turn": null,
+                    "weight": 1.0,
+                    "metadata": {
+                        "selected_sources": [],
+                        "selected_github_repos": [],
+                        "serialization_metadata": {
+                            "custom_symbol_offsets": []
+                        },
+                        "request_id": "95363bcf1e9a9511-LHR",
+                        "message_source": null,
+                        "timestamp_": "absolute",
+                        "message_type": null
+                    },
+                    "recipient": "all",
+                    "channel": null
+                },
+                "parent": "0bb3750d-4450-40b9-8961-d6bfe6dc55aa",
+                "children": [
+                    "8fb6e9b8-dfa7-4e19-8cc2-4a309b8f65d6"
+                ]
+            },
+            "8fb6e9b8-dfa7-4e19-8cc2-4a309b8f65d6": {
+                "id": "8fb6e9b8-dfa7-4e19-8cc2-4a309b8f65d6",
+                "message": {
+                    "id": "8fb6e9b8-dfa7-4e19-8cc2-4a309b8f65d6",
+                    "author": {
+                        "role": "assistant",
+                        "name": null,
+                        "metadata": {}
+                    },
+                    "create_time": 1750537510.569912,
+                    "update_time": null,
+                    "content": {
+                        "content_type": "text",
+                        "parts": [
+                            "An ecosystem is a community of living things (like plants, animals, and microbes) interacting with each other and with their non-living environment (like air, water, and soil) in a specific area. Everything in an ecosystem is connected\u2014changes to one part can affect the whole system.\n\nLet me know if you want examples or details about types of ecosystems."
+                        ]
+                    },
+                    "status": "finished_successfully",
+                    "end_turn": true,
+                    "weight": 1.0,
+                    "metadata": {
+                        "finish_details": {
+                            "type": "stop",
+                            "stop_tokens": [
+                                200002
+                            ]
+                        },
+                        "is_complete": true,
+                        "citations": [],
+                        "content_references": [],
+                        "message_type": null,
+                        "model_slug": "gpt-4o",
+                        "default_model_slug": "gpt-4o",
+                        "parent_id": "a73ae65c-059e-4ba9-818a-c99d801bd029",
+                        "request_id": "95363bcf1e9a9511-LHR",
+                        "timestamp_": "absolute"
+                    },
+                    "recipient": "all",
+                    "channel": null
+                },
+                "parent": "a73ae65c-059e-4ba9-818a-c99d801bd029",
+                "children": [
+                    "dcee2a2c-3dfa-4f02-bf66-aafdb344015b"
+                ]
+            },
+            "dcee2a2c-3dfa-4f02-bf66-aafdb344015b": {
+                "id": "dcee2a2c-3dfa-4f02-bf66-aafdb344015b",
+                "message": {
+                    "id": "dcee2a2c-3dfa-4f02-bf66-aafdb344015b",
+                    "author": {
+                        "role": "user",
+                        "name": null,
+                        "metadata": {}
+                    },
+                    "create_time": 1750537523.23,
+                    "update_time": null,
+                    "content": {
+                        "content_type": "text",
+                        "parts": [
+                            "Are ponds sentient?"
+                        ]
+                    },
+                    "status": "finished_successfully",
+                    "end_turn": null,
+                    "weight": 1.0,
+                    "metadata": {
+                        "selected_sources": [],
+                        "selected_github_repos": [],
+                        "serialization_metadata": {
+                            "custom_symbol_offsets": []
+                        },
+                        "request_id": "95363c1dbbd99511-LHR",
+                        "message_source": null,
+                        "timestamp_": "absolute",
+                        "message_type": null
+                    },
+                    "recipient": "all",
+                    "channel": null
+                },
+                "parent": "8fb6e9b8-dfa7-4e19-8cc2-4a309b8f65d6",
+                "children": [
+                    "be929be7-d15c-4baa-8493-9a3cf74fc2fd"
+                ]
+            },
+            "be929be7-d15c-4baa-8493-9a3cf74fc2fd": {
+                "id": "be929be7-d15c-4baa-8493-9a3cf74fc2fd",
+                "message": {
+                    "id": "be929be7-d15c-4baa-8493-9a3cf74fc2fd",
+                    "author": {
+                        "role": "assistant",
+                        "name": null,
+                        "metadata": {}
+                    },
+                    "create_time": 1750537524.243593,
+                    "update_time": null,
+                    "content": {
+                        "content_type": "text",
+                        "parts": [
+                            "No, ponds are not sentient. Sentience means having the ability to feel, perceive, or experience subjectively\u2014something only animals with nervous systems, like humans and many other creatures, are known to have. A pond is an ecosystem, not a living, thinking being.\n\nIf you're curious about how ecosystems like ponds function or support sentient life, I can explain that too."
+                        ]
+                    },
+                    "status": "finished_successfully",
+                    "end_turn": true,
+                    "weight": 1.0,
+                    "metadata": {
+                        "finish_details": {
+                            "type": "stop",
+                            "stop_tokens": [
+                                200002
+                            ]
+                        },
+                        "is_complete": true,
+                        "citations": [],
+                        "content_references": [],
+                        "message_type": null,
+                        "model_slug": "gpt-4o",
+                        "default_model_slug": "gpt-4o",
+                        "parent_id": "dcee2a2c-3dfa-4f02-bf66-aafdb344015b",
+                        "request_id": "95363c1dbbd99511-LHR",
+                        "timestamp_": "absolute"
+                    },
+                    "recipient": "all",
+                    "channel": null
+                },
+                "parent": "dcee2a2c-3dfa-4f02-bf66-aafdb344015b",
+                "children": [
+                    "b30c1089-094b-40f7-8531-f81310de8a09"
+                ]
+            },
+            "b30c1089-094b-40f7-8531-f81310de8a09": {
+                "id": "b30c1089-094b-40f7-8531-f81310de8a09",
+                "message": {
+                    "id": "b30c1089-094b-40f7-8531-f81310de8a09",
+                    "author": {
+                        "role": "user",
+                        "name": null,
+                        "metadata": {}
+                    },
+                    "create_time": 1750537532.222,
+                    "update_time": null,
+                    "content": {
+                        "content_type": "text",
+                        "parts": [
+                            "What about forests?"
+                        ]
+                    },
+                    "status": "finished_successfully",
+                    "end_turn": null,
+                    "weight": 1.0,
+                    "metadata": {
+                        "selected_sources": [],
+                        "selected_github_repos": [],
+                        "serialization_metadata": {
+                            "custom_symbol_offsets": []
+                        },
+                        "request_id": "95363c55eac19511-LHR",
+                        "message_source": null,
+                        "timestamp_": "absolute",
+                        "message_type": null
+                    },
+                    "recipient": "all",
+                    "channel": null
+                },
+                "parent": "be929be7-d15c-4baa-8493-9a3cf74fc2fd",
+                "children": [
+                    "1dc131c9-3245-4687-a994-fdd42c0fedac"
+                ]
+            },
+            "1dc131c9-3245-4687-a994-fdd42c0fedac": {
+                "id": "1dc131c9-3245-4687-a994-fdd42c0fedac",
+                "message": {
+                    "id": "1dc131c9-3245-4687-a994-fdd42c0fedac",
+                    "author": {
+                        "role": "assistant",
+                        "name": null,
+                        "metadata": {}
+                    },
+                    "create_time": 1750537532.237099,
+                    "update_time": null,
+                    "content": {
+                        "content_type": "text",
+                        "parts": [
+                            "Forests, like ponds, are not sentient\u2014they don\u2019t have thoughts, feelings, or awareness. However, forests are complex ecosystems with many living, sometimes sentient, organisms (like animals) interacting with non-living elements (like sunlight and soil). \n\nIf you\u2019re interested in the idea of forests communicating or behaving in coordinated ways (like through tree root networks), I can explain that too."
+                        ]
+                    },
+                    "status": "finished_successfully",
+                    "end_turn": true,
+                    "weight": 1.0,
+                    "metadata": {
+                        "finish_details": {
+                            "type": "stop",
+                            "stop_tokens": [
+                                200002
+                            ]
+                        },
+                        "is_complete": true,
+                        "citations": [],
+                        "content_references": [],
+                        "message_type": null,
+                        "model_slug": "gpt-4o",
+                        "default_model_slug": "gpt-4o",
+                        "parent_id": "b30c1089-094b-40f7-8531-f81310de8a09",
+                        "request_id": "95363c55eac19511-LHR",
+                        "timestamp_": "absolute"
+                    },
+                    "recipient": "all",
+                    "channel": null
+                },
+                "parent": "b30c1089-094b-40f7-8531-f81310de8a09",
+                "children": []
+            }
+        },
+        "moderation_results": [],
+        "current_node": "1dc131c9-3245-4687-a994-fdd42c0fedac",
+        "plugin_ids": null,
+        "conversation_id": "6857150a-cd20-800f-a5f7-d2404f94b935",
+        "conversation_template_id": null,
+        "gizmo_id": null,
+        "gizmo_type": null,
+        "is_archived": false,
+        "is_starred": null,
+        "safe_urls": [],
+        "blocked_urls": [],
+        "default_model_slug": "gpt-4o",
+        "conversation_origin": null,
+        "voice": null,
+        "async_status": null,
+        "disabled_tool_ids": [],
+        "is_do_not_remember": false,
+        "memory_scope": "global_enabled",
+        "sugar_item_id": null,
+        "id": "6857150a-cd20-800f-a5f7-d2404f94b935"
     }
-  ]
-}
+]
