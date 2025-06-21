@@ -3,20 +3,30 @@
   "mapping": {
     "client-created-root": {
       "message": {
-        "content": {
-          "content_type": "text",
-          "parts": ["Can you explain how photosynthesis works in simple terms?"]
-        }
+        "author": {"role": "user"},
+        "content": {"content_type": "text", "parts": ["Can you explain how photosynthesis works in simple terms?"]},
+        "create_time": "2024-01-01T00:00:00Z"
       }
     },
-    "41512317-7d30-4caa-84e1-4f12db70ef42": {
+    "a1": {
       "message": {
-        "content": {
-          "content_type": "text",
-          "parts": [
-            "Photosynthesis is the process by which plants use sunlight to convert water and carbon dioxide into oxygen and glucose. It helps plants make their own food."
-          ]
-        }
+        "author": {"role": "assistant"},
+        "content": {"content_type": "text", "parts": ["Photosynthesis is the process by which plants convert water and carbon dioxide into oxygen and glucose using sunlight."]},
+        "create_time": "2024-01-01T00:00:10Z"
+      }
+    },
+    "a2": {
+      "message": {
+        "author": {"role": "user"},
+        "content": {"content_type": "text", "parts": ["Why is sunlight important?"]},
+        "create_time": "2024-01-01T00:00:20Z"
+      }
+    },
+    "a3": {
+      "message": {
+        "author": {"role": "assistant"},
+        "content": {"content_type": "text", "parts": ["Sunlight provides the energy needed to drive the chemical reactions in photosynthesis."]},
+        "create_time": "2024-01-01T00:00:30Z"
       }
     }
   }
