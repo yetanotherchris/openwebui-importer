@@ -35,14 +35,19 @@ usage: convert_claude.py [-h] --userid USERID [--output-dir OUTPUT_DIR] files [f
 Convert Claude exports to open-webui JSON
 ```
 
+All converter scripts name the output files using the original conversation ID
+so running them again will produce the same filename for the same conversation.
+Converted files are saved in a subdirectory named after the model (for example
+`output/grok` or `output/claude`).
+
 ### create_sql.py
 
 ```
 usage: create_sql.py [-h] [--tags TAGS] [--output OUTPUT] files [files ...]
 
-Create SQL inserts for open-webui chats. The output also contains UPSERT
-statements that ensure the default import tags, as well as any tags passed via
-`--tags`, exist for each user.
+Create SQL inserts for open-webui chats. The output contains UPSERT
+statements that ensure chat records and the default import tags (as well as any
+tags passed via `--tags`) exist for each user.
 
 positional arguments:
   files            Chat JSON files or directories
@@ -68,11 +73,13 @@ Output will be saved as <input_file>_schema.json
    ```bash
    python ./convert_grok.py --userid="d95194d2-9cef-4387-8ee4-b82eb2e1c637" ./grok.json
    ```
+   The converter writes JSON files to a subdirectory such as `output/grok`.
 4. Generate SQL statements from the converted JSON files:
    ```bash
    python ./create_sql.py ./output --tags="imported, grok" --output=grok.sql
    ```
-   The resulting SQL includes tag UPSERTs so the imported records can be tagged
-   appropriately. Any tags passed with `--tags` are also created for each user.
+   The resulting SQL includes UPSERTs so existing chats and tags are updated if
+   they already exist. Any tags passed with `--tags` are also created for each
+   user.
 5. Make a copy of your `webui.db` database.
 6. Execute the generated SQL using a tool such as [DB Browser for SQLite](https://sqlitebrowser.org/dl/).
