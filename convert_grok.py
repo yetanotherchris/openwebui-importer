@@ -45,8 +45,26 @@ def parse_grok(data: Any) -> List[dict]:
         ts_raw = obj.get("create_time") or obj.get("modify_time") or time.time()
         ts = parse_timestamp(ts_raw, time.time())
         mapping = item.get("mapping") or obj.get("mapping") or data.get("mapping")
+        responses = item.get("responses")
         messages: List[Tuple[str, str, float]] = []
-        if isinstance(mapping, dict):
+        if isinstance(responses, list):
+            def sort_key(resp: Any) -> float:
+                ts_val = resp.get("response", {}).get("create_time")
+                return parse_timestamp(ts_val, ts)
+
+            responses_sorted = sorted(
+                [r for r in responses if isinstance(r, dict)], key=sort_key
+            )
+            for resp in responses_sorted:
+                inner = resp.get("response", {})
+                text = inner.get("message")
+                if not text:
+                    continue
+                sender = inner.get("sender") or "assistant"
+                role = "user" if str(sender).lower() == "human" else "assistant"
+                ts_val = inner.get("create_time")
+                messages.append((role, text, parse_timestamp(ts_val, ts)))
+        elif isinstance(mapping, dict):
             root_node = mapping.get("client-created-root")
             if isinstance(root_node, dict):
                 part = root_node.get("message", {}).get("content", {}).get("parts", [])
