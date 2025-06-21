@@ -93,7 +93,8 @@ def parse_claude(data: Any) -> List[dict]:
                     messages.append(("assistant", text, ts))
         else:
             messages.append(("user", title, ts))
-
+        if not messages:
+            continue
         result.append({"title": title, "timestamp": ts, "messages": messages})
 
     return result
