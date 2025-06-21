@@ -85,8 +85,11 @@ def detect_format(
             conversations = data.get("conversations")
             if isinstance(conversations, list) and conversations:
                 first = conversations[0]
-                if isinstance(first, dict) and {"conversation", "responses"}.issubset(first.keys()):
-                    return "Claude"
+                if isinstance(first, dict):
+                    if {"conversation", "responses"}.issubset(first.keys()):
+                        return "Claude"
+                    if {"conversation", "chat_messages"}.issubset(first.keys()):
+                        return "Claude"
             return "Grok"
         if "title" in data and "mapping" in data:
             return "ChatGPT"
@@ -150,17 +153,26 @@ def parse_chatgpt(data: Any) -> List[dict]:
         elif isinstance(item.get("mapping"), dict):
             mapping = item["mapping"]
             root = mapping.get("client-created-root")
-            if root:
+            if isinstance(root, dict):
                 part = root.get("message", {}).get("content", {}).get("parts", [])
                 if part:
                     messages.append(("user", part[0], ts))
-            for key, val in mapping.items():
-                if key == "client-created-root":
+            other_nodes = [v for k, v in mapping.items() if k != "client-created-root"]
+            def sort_key(node: Any) -> float:
+                ts_val = node.get("message", {}).get("create_time") or node.get("message", {}).get("timestamp")
+                return parse_timestamp(ts_val, ts)
+
+            other_nodes.sort(key=sort_key)
+            for node in other_nodes:
+                if not isinstance(node, dict):
                     continue
-                part = val.get("message", {}).get("content", {}).get("parts", [])
-                if part:
-                    messages.append(("assistant", part[0], ts))
-                    break
+                msg = node.get("message", {})
+                parts = msg.get("content", {}).get("parts", [])
+                if not parts:
+                    continue
+                role = msg.get("author", {}).get("role", "assistant")
+                ts_val = msg.get("create_time") or msg.get("timestamp") or ts
+                messages.append((role, parts[0], parse_timestamp(ts_val, ts)))
         else:
             messages.append(("user", title, ts))
         result.append({"title": title, "timestamp": ts, "messages": messages})
@@ -242,16 +254,28 @@ def parse_grok(data: Any) -> List[dict]:
         mapping = item.get("mapping") or obj.get("mapping") or data.get("mapping")
         messages: List[Tuple[str, str, float]] = []
         if isinstance(mapping, dict):
-            part = mapping.get("client-created-root", {}).get("message", {}).get("content", {}).get("parts", [])
-            if part:
-                messages.append(("user", part[0], ts))
-            for key, val in mapping.items():
-                if key == "client-created-root":
-                    continue
-                part = val.get("message", {}).get("content", {}).get("parts", [])
+            root_node = mapping.get("client-created-root")
+            if isinstance(root_node, dict):
+                part = root_node.get("message", {}).get("content", {}).get("parts", [])
                 if part:
-                    messages.append(("assistant", part[0], ts))
-                    break
+                    messages.append(("user", part[0], ts))
+
+            other_nodes = [v for k, v in mapping.items() if k != "client-created-root"]
+            def sort_key(node: Any) -> float:
+                ts_val = node.get("message", {}).get("create_time") or node.get("message", {}).get("timestamp")
+                return parse_timestamp(ts_val, ts)
+
+            other_nodes.sort(key=sort_key)
+            for node in other_nodes:
+                if not isinstance(node, dict):
+                    continue
+                msg = node.get("message", {})
+                parts = msg.get("content", {}).get("parts", [])
+                if not parts:
+                    continue
+                role = msg.get("author", {}).get("role", "assistant")
+                ts_val = msg.get("create_time") or msg.get("timestamp") or ts
+                messages.append((role, parts[0], parse_timestamp(ts_val, ts)))
         result.append({"title": title, "timestamp": ts, "messages": messages})
     return result
 
