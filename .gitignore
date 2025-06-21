@@ -197,3 +197,7 @@ cython_debug/
 chat-gpt.json
 claude.json
 grok.json
+chat-gpt.sql
+claude.sql
+grok.sql
+output/*
