@@ -12,6 +12,7 @@ from typing import Any, Dict, List, Tuple
 
 MODEL = "anthropic/claude-3.7-sonnet"
 MODEL_NAME = "Claude 3.7 Sonnet"
+SUBDIR = "claude"
 
 
 def extract_last_sentence(text: str) -> str:
@@ -71,6 +72,7 @@ def parse_claude(data: Any) -> List[dict]:
     for item in convs:
         conv = item.get("conversation", item) if isinstance(item, dict) else {}
         title = conv.get("title") or item.get("name") or item.get("title") or "Untitled"
+        conv_id = conv.get("uuid") or item.get("uuid")
         ts_raw = (
             conv.get("created_at")
             or conv.get("updated_at")
@@ -95,7 +97,12 @@ def parse_claude(data: Any) -> List[dict]:
             messages.append(("user", title, ts))
         if not messages:
             continue
-        result.append({"title": title, "timestamp": ts, "messages": messages})
+        result.append({
+            "title": title,
+            "timestamp": ts,
+            "messages": messages,
+            "conversation_id": conv_id,
+        })
 
     return result
 
@@ -163,7 +170,9 @@ def convert_file(path: str, user_id: str, outdir: str) -> None:
     os.makedirs(outdir, exist_ok=True)
     for conv in conversations:
         out, conv_uuid = build_webui(conv, user_id)
-        fname = f"{slugify(conv['title'])}_{conv_uuid}.json"
+        conv_id = conv.get("conversation_id")
+        unique = conv_id if conv_id else conv_uuid
+        fname = f"{slugify(conv['title'])}_{unique}.json"
         with open(os.path.join(outdir, fname), "w", encoding="utf-8") as fh:
             json.dump(out, fh, ensure_ascii=False, indent=2)
 
@@ -174,9 +183,10 @@ def run_cli() -> None:
     parser.add_argument("--userid", required=True, help="User ID for output files")
     parser.add_argument("--output-dir", default="output", help="Directory for output JSON files")
     args = parser.parse_args()
+    outdir = os.path.join(args.output_dir, SUBDIR)
     for path in args.files:
         try:
-            convert_file(path, args.userid, args.output_dir)
+            convert_file(path, args.userid, outdir)
         except Exception as exc:
             print(f"Failed to convert {path}: {exc}")
 

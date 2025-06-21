@@ -12,6 +12,7 @@ from typing import Any, Dict, List, Tuple
 
 MODEL = "openai/chatgpt-4o-latest"
 MODEL_NAME = "ChatGPT 4o (latest)"
+SUBDIR = "chatgpt"
 
 
 def extract_last_sentence(text: str) -> str:
@@ -47,6 +48,7 @@ def parse_chatgpt(data: Any) -> List[dict]:
         title = item.get("title") or item.get("name") or "Untitled"
         ts_raw = item.get("create_time") or item.get("update_time") or time.time()
         ts = parse_timestamp(ts_raw, time.time())
+        conv_id = item.get("conversation_id") or item.get("id")
         messages: List[Tuple[str, str, float]] = []
         if isinstance(item.get("chat_messages"), list):
             for idx, msg in enumerate(item["chat_messages"]):
@@ -76,7 +78,12 @@ def parse_chatgpt(data: Any) -> List[dict]:
                     next_ids = node.get("children") or []
         else:
             messages.append(("user", title, ts))
-        result.append({"title": title, "timestamp": ts, "messages": messages})
+        result.append({
+            "title": title,
+            "timestamp": ts,
+            "messages": messages,
+            "conversation_id": conv_id,
+        })
     return result
 
 
@@ -143,7 +150,9 @@ def convert_file(path: str, user_id: str, outdir: str) -> None:
     os.makedirs(outdir, exist_ok=True)
     for conv in conversations:
         out, conv_uuid = build_webui(conv, user_id)
-        fname = f"{slugify(conv['title'])}_{conv_uuid}.json"
+        conv_id = conv.get("conversation_id")
+        unique = conv_id if conv_id else conv_uuid
+        fname = f"{slugify(conv['title'])}_{unique}.json"
         with open(os.path.join(outdir, fname), "w", encoding="utf-8") as fh:
             json.dump(out, fh, ensure_ascii=False, indent=2)
 
@@ -154,9 +163,10 @@ def run_cli() -> None:
     parser.add_argument("--userid", required=True, help="User ID for output files")
     parser.add_argument("--output-dir", default="output", help="Directory for output JSON files")
     args = parser.parse_args()
+    outdir = os.path.join(args.output_dir, SUBDIR)
     for path in args.files:
         try:
-            convert_file(path, args.userid, args.output_dir)
+            convert_file(path, args.userid, outdir)
         except Exception as exc:
             print(f"Failed to convert {path}: {exc}")
 

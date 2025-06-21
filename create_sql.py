@@ -65,13 +65,23 @@ def json_to_sql(path: str, tags: list[str]) -> tuple[str, str]:
     title = escape_sql_string(data.get("title", ""))
     timestamp_ms = data.get("timestamp", 0)
     created_at = int(int(timestamp_ms) / 1000)
-    record_id = str(uuid.uuid4())
+
+    base = os.path.splitext(os.path.basename(path))[0]
+    possible_id = base.split("_")[-1]
+    try:
+        uuid.UUID(possible_id)
+        record_id = possible_id
+    except ValueError:
+        record_id = str(uuid.uuid4())
 
     meta = build_meta(tags)
 
     sql = (
         'INSERT INTO "main"."chat" ("id","user_id","title","share_id","archived","created_at","updated_at","chat","pinned","meta","folder_id")\n'
-        f"VALUES ('{record_id}','{user_id}','{title}',NULL,0,{created_at},{created_at},'{chat_json}',0,'{meta}',NULL);"
+        f"VALUES ('{record_id}','{user_id}','{title}',NULL,0,{created_at},{created_at},'{chat_json}',0,'{meta}',NULL)\n"
+        'ON CONFLICT("id","user_id") DO UPDATE SET '
+        '"title"=excluded."title", "chat"=excluded."chat", "meta"=excluded."meta", '
+        '"updated_at"=excluded."updated_at";'
     )
     return sql, user_id
 
