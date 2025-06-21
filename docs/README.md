@@ -40,7 +40,9 @@ Convert Claude exports to open-webui JSON
 ```
 usage: create_sql.py [-h] [--tags TAGS] [--output OUTPUT] files [files ...]
 
-Create SQL inserts for open-webui chats
+Create SQL inserts for open-webui chats. The output also contains UPSERT
+statements that ensure the default import tags, as well as any tags passed via
+`--tags`, exist for each user.
 
 positional arguments:
   files            Chat JSON files or directories
@@ -70,5 +72,7 @@ Output will be saved as <input_file>_schema.json
    ```bash
    python ./create_sql.py ./output --tags="imported, grok" --output=grok.sql
    ```
+   The resulting SQL includes tag UPSERTs so the imported records can be tagged
+   appropriately. Any tags passed with `--tags` are also created for each user.
 5. Make a copy of your `webui.db` database.
 6. Execute the generated SQL using a tool such as [DB Browser for SQLite](https://sqlitebrowser.org/dl/).
