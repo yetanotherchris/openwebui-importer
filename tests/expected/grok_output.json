@@ -1,0 +1,151 @@
+{
+  "id": "",
+  "title": "How does photosynthesis work?",
+  "models": [
+    "x-ai/grok-3"
+  ],
+  "params": {},
+  "history": {
+    "messages": {
+      "00000000-0000-0000-0000-000000000002": {
+        "id": "00000000-0000-0000-0000-000000000002",
+        "parentId": null,
+        "childrenIds": [
+          "00000000-0000-0000-0000-000000000003"
+        ],
+        "role": "user",
+        "content": "Can you explain how photosynthesis works in simple terms?",
+        "timestamp": 1234567890,
+        "models": [
+          "x-ai/grok-3"
+        ]
+      },
+      "00000000-0000-0000-0000-000000000003": {
+        "id": "00000000-0000-0000-0000-000000000003",
+        "parentId": "00000000-0000-0000-0000-000000000002",
+        "childrenIds": [
+          "00000000-0000-0000-0000-000000000004"
+        ],
+        "role": "assistant",
+        "content": "Photosynthesis is the process by which plants convert water and carbon dioxide into oxygen and glucose using sunlight.",
+        "timestamp": 1704067210,
+        "model": "x-ai/grok-3",
+        "modelName": "Grok 3",
+        "modelIdx": 0,
+        "userContext": null,
+        "lastSentence": "Photosynthesis is the process by which plants convert water and carbon dioxide into oxygen and glucose using sunlight.",
+        "usage": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "total_tokens": 0
+        },
+        "done": true
+      },
+      "00000000-0000-0000-0000-000000000004": {
+        "id": "00000000-0000-0000-0000-000000000004",
+        "parentId": "00000000-0000-0000-0000-000000000003",
+        "childrenIds": [
+          "00000000-0000-0000-0000-000000000005"
+        ],
+        "role": "user",
+        "content": "Why is sunlight important?",
+        "timestamp": 1704067220,
+        "models": [
+          "x-ai/grok-3"
+        ]
+      },
+      "00000000-0000-0000-0000-000000000005": {
+        "id": "00000000-0000-0000-0000-000000000005",
+        "parentId": "00000000-0000-0000-0000-000000000004",
+        "childrenIds": [],
+        "role": "assistant",
+        "content": "Sunlight provides the energy needed to drive the chemical reactions in photosynthesis.",
+        "timestamp": 1704067230,
+        "model": "x-ai/grok-3",
+        "modelName": "Grok 3",
+        "modelIdx": 0,
+        "userContext": null,
+        "lastSentence": "Sunlight provides the energy needed to drive the chemical reactions in photosynthesis.",
+        "usage": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "total_tokens": 0
+        },
+        "done": true
+      }
+    },
+    "currentId": "00000000-0000-0000-0000-000000000005"
+  },
+  "messages": [
+    {
+      "id": "00000000-0000-0000-0000-000000000002",
+      "parentId": null,
+      "childrenIds": [
+        "00000000-0000-0000-0000-000000000003"
+      ],
+      "role": "user",
+      "content": "Can you explain how photosynthesis works in simple terms?",
+      "timestamp": 1234567890,
+      "models": [
+        "x-ai/grok-3"
+      ]
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000003",
+      "parentId": "00000000-0000-0000-0000-000000000002",
+      "childrenIds": [
+        "00000000-0000-0000-0000-000000000004"
+      ],
+      "role": "assistant",
+      "content": "Photosynthesis is the process by which plants convert water and carbon dioxide into oxygen and glucose using sunlight.",
+      "timestamp": 1704067210,
+      "model": "x-ai/grok-3",
+      "modelName": "Grok 3",
+      "modelIdx": 0,
+      "userContext": null,
+      "lastSentence": "Photosynthesis is the process by which plants convert water and carbon dioxide into oxygen and glucose using sunlight.",
+      "usage": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "total_tokens": 0
+      },
+      "done": true
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000004",
+      "parentId": "00000000-0000-0000-0000-000000000003",
+      "childrenIds": [
+        "00000000-0000-0000-0000-000000000005"
+      ],
+      "role": "user",
+      "content": "Why is sunlight important?",
+      "timestamp": 1704067220,
+      "models": [
+        "x-ai/grok-3"
+      ]
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000005",
+      "parentId": "00000000-0000-0000-0000-000000000004",
+      "childrenIds": [],
+      "role": "assistant",
+      "content": "Sunlight provides the energy needed to drive the chemical reactions in photosynthesis.",
+      "timestamp": 1704067230,
+      "model": "x-ai/grok-3",
+      "modelName": "Grok 3",
+      "modelIdx": 0,
+      "userContext": null,
+      "lastSentence": "Sunlight provides the energy needed to drive the chemical reactions in photosynthesis.",
+      "usage": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "total_tokens": 0
+      },
+      "done": true
+    }
+  ],
+  "tags": [],
+  "timestamp": 1234567890000,
+  "files": [],
+  "userId": "user"
+}

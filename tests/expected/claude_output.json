@@ -1,0 +1,151 @@
+{
+  "id": "",
+  "title": "Why do leaves change color in autumn?",
+  "models": [
+    "anthropic/claude-3.7-sonnet"
+  ],
+  "params": {},
+  "history": {
+    "messages": {
+      "00000000-0000-0000-0000-000000000002": {
+        "id": "00000000-0000-0000-0000-000000000002",
+        "parentId": null,
+        "childrenIds": [
+          "00000000-0000-0000-0000-000000000003"
+        ],
+        "role": "user",
+        "content": "Why do leaves change color in autumn?",
+        "timestamp": 1234567890,
+        "models": [
+          "anthropic/claude-3.7-sonnet"
+        ]
+      },
+      "00000000-0000-0000-0000-000000000003": {
+        "id": "00000000-0000-0000-0000-000000000003",
+        "parentId": "00000000-0000-0000-0000-000000000002",
+        "childrenIds": [
+          "00000000-0000-0000-0000-000000000004"
+        ],
+        "role": "assistant",
+        "content": "Leaves change color as chlorophyll breaks down, revealing other pigments like carotenoids and anthocyanins.",
+        "timestamp": 1234567890,
+        "model": "anthropic/claude-3.7-sonnet",
+        "modelName": "Claude 3.7 Sonnet",
+        "modelIdx": 0,
+        "userContext": null,
+        "lastSentence": "Leaves change color as chlorophyll breaks down, revealing other pigments like carotenoids and anthocyanins.",
+        "usage": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "total_tokens": 0
+        },
+        "done": true
+      },
+      "00000000-0000-0000-0000-000000000004": {
+        "id": "00000000-0000-0000-0000-000000000004",
+        "parentId": "00000000-0000-0000-0000-000000000003",
+        "childrenIds": [
+          "00000000-0000-0000-0000-000000000005"
+        ],
+        "role": "user",
+        "content": "Does temperature affect the colors?",
+        "timestamp": 1234567890,
+        "models": [
+          "anthropic/claude-3.7-sonnet"
+        ]
+      },
+      "00000000-0000-0000-0000-000000000005": {
+        "id": "00000000-0000-0000-0000-000000000005",
+        "parentId": "00000000-0000-0000-0000-000000000004",
+        "childrenIds": [],
+        "role": "assistant",
+        "content": "Yes, temperature and sunlight influence the intensity of autumn leaf colors.",
+        "timestamp": 1234567890,
+        "model": "anthropic/claude-3.7-sonnet",
+        "modelName": "Claude 3.7 Sonnet",
+        "modelIdx": 0,
+        "userContext": null,
+        "lastSentence": "Yes, temperature and sunlight influence the intensity of autumn leaf colors.",
+        "usage": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "total_tokens": 0
+        },
+        "done": true
+      }
+    },
+    "currentId": "00000000-0000-0000-0000-000000000005"
+  },
+  "messages": [
+    {
+      "id": "00000000-0000-0000-0000-000000000002",
+      "parentId": null,
+      "childrenIds": [
+        "00000000-0000-0000-0000-000000000003"
+      ],
+      "role": "user",
+      "content": "Why do leaves change color in autumn?",
+      "timestamp": 1234567890,
+      "models": [
+        "anthropic/claude-3.7-sonnet"
+      ]
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000003",
+      "parentId": "00000000-0000-0000-0000-000000000002",
+      "childrenIds": [
+        "00000000-0000-0000-0000-000000000004"
+      ],
+      "role": "assistant",
+      "content": "Leaves change color as chlorophyll breaks down, revealing other pigments like carotenoids and anthocyanins.",
+      "timestamp": 1234567890,
+      "model": "anthropic/claude-3.7-sonnet",
+      "modelName": "Claude 3.7 Sonnet",
+      "modelIdx": 0,
+      "userContext": null,
+      "lastSentence": "Leaves change color as chlorophyll breaks down, revealing other pigments like carotenoids and anthocyanins.",
+      "usage": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "total_tokens": 0
+      },
+      "done": true
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000004",
+      "parentId": "00000000-0000-0000-0000-000000000003",
+      "childrenIds": [
+        "00000000-0000-0000-0000-000000000005"
+      ],
+      "role": "user",
+      "content": "Does temperature affect the colors?",
+      "timestamp": 1234567890,
+      "models": [
+        "anthropic/claude-3.7-sonnet"
+      ]
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000005",
+      "parentId": "00000000-0000-0000-0000-000000000004",
+      "childrenIds": [],
+      "role": "assistant",
+      "content": "Yes, temperature and sunlight influence the intensity of autumn leaf colors.",
+      "timestamp": 1234567890,
+      "model": "anthropic/claude-3.7-sonnet",
+      "modelName": "Claude 3.7 Sonnet",
+      "modelIdx": 0,
+      "userContext": null,
+      "lastSentence": "Yes, temperature and sunlight influence the intensity of autumn leaf colors.",
+      "usage": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "total_tokens": 0
+      },
+      "done": true
+    }
+  ],
+  "tags": [],
+  "timestamp": 1234567890000,
+  "files": [],
+  "userId": "user"
+}
