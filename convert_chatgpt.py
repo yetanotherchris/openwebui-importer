@@ -59,28 +59,21 @@ def parse_chatgpt(data: Any) -> List[dict]:
                     messages.append((role, text, ts))
         elif isinstance(item.get("mapping"), dict):
             mapping = item["mapping"]
-            root = mapping.get("client-created-root")
-            if isinstance(root, dict):
-                part = root.get("message", {}).get("content", {}).get("parts", [])
-                if part:
-                    messages.append(("user", part[0], ts))
-            other_nodes = [v for k, v in mapping.items() if k != "client-created-root"]
-
-            def sort_key(node: Any) -> float:
-                ts_val = node.get("message", {}).get("create_time") or node.get("message", {}).get("timestamp")
-                return parse_timestamp(ts_val, ts)
-
-            other_nodes.sort(key=sort_key)
-            for node in other_nodes:
-                if not isinstance(node, dict):
-                    continue
-                msg = node.get("message", {})
-                parts = msg.get("content", {}).get("parts", [])
-                if not parts:
-                    continue
-                role = msg.get("author", {}).get("role", "assistant")
-                ts_val = msg.get("create_time") or msg.get("timestamp") or ts
-                messages.append((role, parts[0], parse_timestamp(ts_val, ts)))
+            node = mapping.get("client-created-root")
+            if isinstance(node, dict):
+                next_ids = node.get("children") or []
+                while next_ids:
+                    node = mapping.get(next_ids[0])
+                    if not isinstance(node, dict):
+                        break
+                    msg = node.get("message") or {}
+                    parts = msg.get("content", {}).get("parts", [])
+                    if parts:
+                        role = msg.get("author", {}).get("role", "assistant")
+                        if role in {"user", "assistant"}:
+                            ts_val = msg.get("create_time") or msg.get("timestamp") or ts
+                            messages.append((role, parts[0], parse_timestamp(ts_val, ts)))
+                    next_ids = node.get("children") or []
         else:
             messages.append(("user", title, ts))
         result.append({"title": title, "timestamp": ts, "messages": messages})
