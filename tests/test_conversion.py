@@ -62,3 +62,9 @@ def test_grok_conversion(monkeypatch):
     assert result == expected
 
 
+def test_invalid_unicode(monkeypatch):
+    result = _run_conversion(convert_chatgpt, "examples/invalid_unicode.json", monkeypatch)
+    expected = _load_expected("invalid_unicode")
+    assert result == expected
+
+

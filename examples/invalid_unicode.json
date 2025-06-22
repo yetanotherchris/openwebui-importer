@@ -1,0 +1,11 @@
+[
+  {
+    "title": "Invalid unicode test",
+    "create_time": 1000,
+    "conversation_id": "conv1",
+    "chat_messages": [
+      {"text": "\ue203Hello\ue204"},
+      {"text": "\ue205World\ue206"}
+    ]
+  }
+]

@@ -1,0 +1,83 @@
+{
+  "id": "",
+  "title": "Invalid unicode test",
+  "models": [
+    "openai/chatgpt-4o-latest"
+  ],
+  "params": {},
+  "history": {
+    "messages": {
+      "00000000-0000-0000-0000-000000000002": {
+        "id": "00000000-0000-0000-0000-000000000002",
+        "parentId": null,
+        "childrenIds": [
+          "00000000-0000-0000-0000-000000000003"
+        ],
+        "role": "user",
+        "content": "Hello",
+        "timestamp": 1000,
+        "models": [
+          "openai/chatgpt-4o-latest"
+        ]
+      },
+      "00000000-0000-0000-0000-000000000003": {
+        "id": "00000000-0000-0000-0000-000000000003",
+        "parentId": "00000000-0000-0000-0000-000000000002",
+        "childrenIds": [],
+        "role": "assistant",
+        "content": "World",
+        "timestamp": 1000,
+        "model": "openai/chatgpt-4o-latest",
+        "modelName": "ChatGPT 4o (latest)",
+        "modelIdx": 0,
+        "userContext": null,
+        "lastSentence": "World",
+        "usage": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "total_tokens": 0
+        },
+        "done": true
+      }
+    },
+    "currentId": "00000000-0000-0000-0000-000000000003"
+  },
+  "messages": [
+    {
+      "id": "00000000-0000-0000-0000-000000000002",
+      "parentId": null,
+      "childrenIds": [
+        "00000000-0000-0000-0000-000000000003"
+      ],
+      "role": "user",
+      "content": "Hello",
+      "timestamp": 1000,
+      "models": [
+        "openai/chatgpt-4o-latest"
+      ]
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000003",
+      "parentId": "00000000-0000-0000-0000-000000000002",
+      "childrenIds": [],
+      "role": "assistant",
+      "content": "World",
+      "timestamp": 1000,
+      "model": "openai/chatgpt-4o-latest",
+      "modelName": "ChatGPT 4o (latest)",
+      "modelIdx": 0,
+      "userContext": null,
+      "lastSentence": "World",
+      "usage": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "total_tokens": 0
+      },
+      "done": true
+    }
+  ],
+  "tags": [],
+  "timestamp": 1000000,
+  "files": [],
+  "userId": "user"
+}

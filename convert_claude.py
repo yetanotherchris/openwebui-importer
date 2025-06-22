@@ -10,6 +10,15 @@ import uuid
 from datetime import datetime
 from typing import Any, Dict, List, Tuple
 
+INVALID_RE = re.compile(r"[\ue000-\uf8ff]")
+
+
+def sanitize_text(text: Any) -> str:
+    """Return ``text`` without private-use Unicode characters."""
+    if not isinstance(text, str):
+        return ""
+    return INVALID_RE.sub("", text)
+
 MODEL = "anthropic/claude-3.7-sonnet"
 MODEL_NAME = "Claude 3.7 Sonnet"
 SUBDIR = "claude"
@@ -46,6 +55,7 @@ def _parse_message_list(msgs: list[Any], default_ts: float) -> List[Tuple[str, s
         if not text and isinstance(msg.get("content"), list):
             parts = [p.get("text", "") for p in msg.get("content", [])]
             text = "".join(parts)
+        text = sanitize_text(text)
         if not text:
             continue
         role = msg.get("role") or msg.get("sender")
@@ -91,6 +101,7 @@ def parse_claude(data: Any) -> List[dict]:
             messages.append(("user", title, ts))
             for resp in item["responses"]:
                 text = resp.get("response", {}).get("text")
+                text = sanitize_text(text)
                 if text:
                     messages.append(("assistant", text, ts))
         else:
@@ -114,12 +125,13 @@ def build_webui(conversation: dict, user_id: str) -> Tuple[Dict[str, Any], str]:
     prev_id: str | None = None
     for role, content, ts in conversation["messages"]:
         msg_id = str(uuid.uuid4())
+        clean = sanitize_text(content)
         msg = {
             "id": msg_id,
             "parentId": prev_id,
             "childrenIds": [],
             "role": role,
-            "content": content,
+            "content": clean,
             "timestamp": int(ts),
         }
         if role == "user":
@@ -131,7 +143,7 @@ def build_webui(conversation: dict, user_id: str) -> Tuple[Dict[str, Any], str]:
                     "modelName": MODEL_NAME,
                     "modelIdx": 0,
                     "userContext": None,
-                    "lastSentence": extract_last_sentence(content),
+                    "lastSentence": extract_last_sentence(clean),
                     "usage": {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0},
                     "done": True,
                 }
