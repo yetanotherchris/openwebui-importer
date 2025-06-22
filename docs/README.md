@@ -45,9 +45,10 @@ Converted files are saved in a subdirectory named after the model (for example
 ```
 usage: create_sql.py [-h] [--tags TAGS] [--output OUTPUT] files [files ...]
 
-Create SQL inserts for open-webui chats. The output contains UPSERT
-statements that ensure chat records and the default import tags (as well as any
-tags passed via `--tags`) exist for each user.
+Create SQL inserts for open-webui chats. Existing chat records are deleted
+before inserting so they are replaced if already present. Tags are inserted
+with UPSERT statements, ensuring the default import tags (and any tags passed
+via `--tags`) exist for each user.
 
 positional arguments:
   files            Chat JSON files or directories
@@ -78,8 +79,9 @@ Output will be saved as <input_file>_schema.json
    ```bash
    python ./create_sql.py ./output --tags="imported, grok" --output=grok.sql
    ```
-   The resulting SQL includes UPSERTs so existing chats and tags are updated if
-   they already exist. Any tags passed with `--tags` are also created for each
-   user.
+   The resulting SQL removes any existing chats with the same IDs before
+   inserting new ones, while tags are inserted using UPSERTs so they are
+   updated if they already exist. Any tags passed with `--tags` are also created
+   for each user.
 5. Make a copy of your `webui.db` database.
 6. Execute the generated SQL using a tool such as [DB Browser for SQLite](https://sqlitebrowser.org/dl/).
