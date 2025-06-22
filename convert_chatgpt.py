@@ -76,6 +76,14 @@ def parse_chatgpt(data: Any) -> List[dict]:
         elif isinstance(item.get("mapping"), dict):
             mapping = item["mapping"]
             node = mapping.get("client-created-root")
+            if not isinstance(node, dict):
+                # Some exports don't use the "client-created-root" key. In
+                # those cases, attempt to locate the root node by finding the
+                # entry with no parent value.
+                for val in mapping.values():
+                    if isinstance(val, dict) and not val.get("parent"):
+                        node = val
+                        break
             if isinstance(node, dict):
                 next_ids = node.get("children") or []
                 while next_ids:
