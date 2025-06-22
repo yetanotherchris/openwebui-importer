@@ -12,7 +12,7 @@ The imported chats are given the tags `imported-chatgpt`, `imported-claude` and 
 ## Quick start
 
 ```
-python .\convert_chatgpt.py --userid="get-this-from-your-sqlite-db" .\chatgpt.json   
+python .\convert_chatgpt.py --userid="get-this-from-your-webui.db" .\chatgpt.json   
 python .\create_sql.py ./output/chatgpt --tags="imported-chatgpt" --output=chatgpt.sql
 ```
 
@@ -98,4 +98,4 @@ Output will be saved as <input_file>_schema.json
    updated if they already exist. Any tags passed with `--tags` are also created
    for each user.
 5. Make a copy of your `webui.db` database.
-6. Execute the generated SQL using a tool such as [DB Browser for SQLite](https://sqlitebrowser.org/dl/).
+6. Execute the generated SQL using a tool such as [DB Browser for SQLite](https://sqlitebrowser.org/dl/). Ensure you save the database.
