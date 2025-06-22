@@ -75,21 +75,12 @@ def parse_chatgpt(data: Any) -> List[dict]:
                     messages.append((role, text, ts))
         elif isinstance(item.get("mapping"), dict):
             mapping = item["mapping"]
-            node = mapping.get("client-created-root")
-            if not isinstance(node, dict):
-                # Some exports don't use the "client-created-root" key. In
-                # those cases, attempt to locate the root node by finding the
-                # entry with no parent value.
-                for val in mapping.values():
-                    if isinstance(val, dict) and not val.get("parent"):
-                        node = val
-                        break
-            if isinstance(node, dict):
-                next_ids = node.get("children") or []
-                while next_ids:
-                    node = mapping.get(next_ids[0])
-                    if not isinstance(node, dict):
-                        break
+            node = None
+            current_id = item.get("current_node")
+            if current_id and isinstance(mapping.get(current_id), dict):
+                node = mapping[current_id]
+                stack: List[Tuple[str, str, float]] = []
+                while isinstance(node, dict):
                     msg = node.get("message") or {}
                     parts = msg.get("content", {}).get("parts", [])
                     if parts:
@@ -98,8 +89,38 @@ def parse_chatgpt(data: Any) -> List[dict]:
                             ts_val = msg.get("create_time") or msg.get("timestamp") or ts
                             text = _parts_to_text(parts)
                             if text:
-                                messages.append((role, text, parse_timestamp(ts_val, ts)))
+                                stack.append((role, text, parse_timestamp(ts_val, ts)))
+                    parent_id = node.get("parent")
+                    if not parent_id:
+                        break
+                    node = mapping.get(parent_id)
+                messages.extend(reversed(stack))
+            else:
+                node = mapping.get("client-created-root")
+                if not isinstance(node, dict):
+                    # Some exports don't use the "client-created-root" key. In
+                    # those cases, attempt to locate the root node by finding the
+                    # entry with no parent value.
+                    for val in mapping.values():
+                        if isinstance(val, dict) and not val.get("parent"):
+                            node = val
+                            break
+                if isinstance(node, dict):
                     next_ids = node.get("children") or []
+                    while next_ids:
+                        node = mapping.get(next_ids[0])
+                        if not isinstance(node, dict):
+                            break
+                        msg = node.get("message") or {}
+                        parts = msg.get("content", {}).get("parts", [])
+                        if parts:
+                            role = msg.get("author", {}).get("role", "assistant")
+                            if role in {"user", "assistant"}:
+                                ts_val = msg.get("create_time") or msg.get("timestamp") or ts
+                                text = _parts_to_text(parts)
+                                if text:
+                                    messages.append((role, text, parse_timestamp(ts_val, ts)))
+                        next_ids = node.get("children") or []
         else:
             messages.append(("user", title, ts))
         result.append({
