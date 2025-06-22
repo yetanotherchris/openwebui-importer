@@ -1,6 +1,12 @@
 import json
 import uuid
 import types
+import os
+import sys
+
+ROOT_DIR = os.path.dirname(os.path.dirname(__file__))
+if ROOT_DIR not in sys.path:
+    sys.path.insert(0, ROOT_DIR)
 
 import convert_chatgpt
 import convert_claude
@@ -54,3 +60,5 @@ def test_grok_conversion(monkeypatch):
     result = _run_conversion(convert_grok, "examples/grok_example.json", monkeypatch)
     expected = _load_expected("grok")
     assert result == expected
+
+
