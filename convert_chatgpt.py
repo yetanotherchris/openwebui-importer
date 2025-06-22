@@ -15,8 +15,10 @@ MODEL_NAME = "ChatGPT 4o (latest)"
 SUBDIR = "chatgpt"
 
 
-def extract_last_sentence(text: str) -> str:
-    """Return the last sentence of ``text``."""
+def extract_last_sentence(text: Any) -> str:
+    """Return the last sentence of ``text`` if it is a string."""
+    if not isinstance(text, str):
+        return ""
     cleaned = text.strip()
     if not cleaned:
         return ""
@@ -25,6 +27,19 @@ def extract_last_sentence(text: str) -> str:
         return matches[-1].strip()
     lines = [ln.strip() for ln in cleaned.splitlines() if ln.strip()]
     return lines[-1] if lines else cleaned
+
+
+def _parts_to_text(parts: List[Any]) -> str:
+    """Return concatenated text from ChatGPT message parts."""
+    texts: List[str] = []
+    for part in parts:
+        if isinstance(part, str):
+            texts.append(part)
+        elif isinstance(part, dict) and "text" in part:
+            val = part.get("text")
+            if isinstance(val, str):
+                texts.append(val)
+    return "".join(texts)
 
 
 def parse_timestamp(value: Any, default: float) -> float:
@@ -54,8 +69,7 @@ def parse_chatgpt(data: Any) -> List[dict]:
             for idx, msg in enumerate(item["chat_messages"]):
                 text = msg.get("text")
                 if not text and isinstance(msg.get("content"), list):
-                    parts = [p.get("text", "") for p in msg["content"]]
-                    text = "".join(parts)
+                    text = _parts_to_text(msg["content"])
                 if text:
                     role = "user" if idx % 2 == 0 else "assistant"
                     messages.append((role, text, ts))
@@ -74,7 +88,9 @@ def parse_chatgpt(data: Any) -> List[dict]:
                         role = msg.get("author", {}).get("role", "assistant")
                         if role in {"user", "assistant"}:
                             ts_val = msg.get("create_time") or msg.get("timestamp") or ts
-                            messages.append((role, parts[0], parse_timestamp(ts_val, ts)))
+                            text = _parts_to_text(parts)
+                            if text:
+                                messages.append((role, text, parse_timestamp(ts_val, ts)))
                     next_ids = node.get("children") or []
         else:
             messages.append(("user", title, ts))
@@ -137,7 +153,9 @@ def build_webui(conversation: dict, user_id: str) -> Tuple[Dict[str, Any], str]:
     return webui, conv_uuid
 
 
-def slugify(text: str) -> str:
+def slugify(text: Any) -> str:
+    if not isinstance(text, str):
+        text = str(text)
     text = re.sub(r"\s+", "_", text.strip())
     text = re.sub(r"[^a-zA-Z0-9_\-]", "", text)
     return text[:50] or "chat"
