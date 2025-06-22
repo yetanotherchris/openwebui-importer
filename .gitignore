@@ -194,10 +194,10 @@ cython_debug/
 .cursorindexingignore
 
 # Real files
-chat-gpt.json
+chatgpt.json
 claude.json
 grok.json
-chat-gpt.sql
+chatgpt.sql
 claude.sql
 grok.sql
 output/*

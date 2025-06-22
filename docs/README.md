@@ -1,15 +1,28 @@
 # openwebui-importer
 
-Import Grok, Claude and ChatGPT chats into [open-webui](https://github.com/open-webui/open-webui).
+**Import Grok, Claude and ChatGPT chats into [open-webui](https://github.com/open-webui/open-webui).**
+
+This importer tool has two Python scripts: one for converting the model JSON files to openweb-ui format JSON, the second for 
+creating a SQL script to import the JSON into the openweb-ui SQLite database.  
+
+The imported chats are given the tags `imported-chatgpt`, `imported-claude` and `imported-grok`.  
+
+*There were problems exporting chats from Gemini, so it's not currently supported. DeepSeek and others could be added without much effort.*
+
+## Quick start
+
+```
+python .\convert_chatgpt.py --userid="get-this-from-your-sqlite-db" .\chatgpt.json   
+python .\create_sql.py ./output/chatgpt --tags="imported-chatgpt" --output=chatgpt.sql
+```
+
+## Scripts
 
 Install the required Python dependencies first:
 
 ```bash
 pip install -r requirements.txt
 ```
-
-## Scripts
-
 
 ### convert_chatgpt.py
 
@@ -60,6 +73,7 @@ options:
 ```
 
 ### create-schema.py
+JSON schemas were originally used with the Model's export JSON. This script and the schemas are kept for reference.
 
 ```
 Usage: python json_schema_generator.py <input_json_file>
@@ -77,7 +91,7 @@ Output will be saved as <input_file>_schema.json
    The converter writes JSON files to a subdirectory such as `output/grok`.
 4. Generate SQL statements from the converted JSON files:
    ```bash
-   python ./create_sql.py ./output --tags="imported, grok" --output=grok.sql
+   python ./create_sql.py ./output --tags="imported-grok" --output=grok.sql
    ```
    The resulting SQL removes any existing chats with the same IDs before
    inserting new ones, while tags are inserted using UPSERTs so they are
