@@ -5,10 +5,19 @@ import argparse
 import json
 import os
 import re
+from typing import Any, Dict, List, Tuple
 import time
 import uuid
 from datetime import datetime
-from typing import Any, Dict, List, Tuple
+
+INVALID_RE = re.compile(r"[\ue000-\uf8ff]")
+
+
+def sanitize_text(text: Any) -> str:
+    """Return ``text`` without private-use Unicode characters."""
+    if not isinstance(text, str):
+        return ""
+    return INVALID_RE.sub("", text)
 
 MODEL = "openai/chatgpt-4o-latest"
 MODEL_NAME = "ChatGPT 4o (latest)"
@@ -34,11 +43,11 @@ def _parts_to_text(parts: List[Any]) -> str:
     texts: List[str] = []
     for part in parts:
         if isinstance(part, str):
-            texts.append(part)
+            texts.append(sanitize_text(part))
         elif isinstance(part, dict) and "text" in part:
             val = part.get("text")
             if isinstance(val, str):
-                texts.append(val)
+                texts.append(sanitize_text(val))
     return "".join(texts)
 
 
@@ -70,6 +79,7 @@ def parse_chatgpt(data: Any) -> List[dict]:
                 text = msg.get("text")
                 if not text and isinstance(msg.get("content"), list):
                     text = _parts_to_text(msg["content"])
+                text = sanitize_text(text)
                 if text:
                     role = "user" if idx % 2 == 0 else "assistant"
                     messages.append((role, text, ts))
@@ -87,7 +97,7 @@ def parse_chatgpt(data: Any) -> List[dict]:
                         role = msg.get("author", {}).get("role", "assistant")
                         if role in {"user", "assistant"}:
                             ts_val = msg.get("create_time") or msg.get("timestamp") or ts
-                            text = _parts_to_text(parts)
+                            text = sanitize_text(_parts_to_text(parts))
                             if text:
                                 stack.append((role, text, parse_timestamp(ts_val, ts)))
                     parent_id = node.get("parent")
@@ -117,7 +127,7 @@ def parse_chatgpt(data: Any) -> List[dict]:
                             role = msg.get("author", {}).get("role", "assistant")
                             if role in {"user", "assistant"}:
                                 ts_val = msg.get("create_time") or msg.get("timestamp") or ts
-                                text = _parts_to_text(parts)
+                                text = sanitize_text(_parts_to_text(parts))
                                 if text:
                                     messages.append((role, text, parse_timestamp(ts_val, ts)))
                         next_ids = node.get("children") or []
@@ -139,12 +149,13 @@ def build_webui(conversation: dict, user_id: str) -> Tuple[Dict[str, Any], str]:
     prev_id: str | None = None
     for role, content, ts in conversation["messages"]:
         msg_id = str(uuid.uuid4())
+        clean = sanitize_text(content)
         msg = {
             "id": msg_id,
             "parentId": prev_id,
             "childrenIds": [],
             "role": role,
-            "content": content,
+            "content": clean,
             "timestamp": int(ts),
         }
         if role == "user":
@@ -156,7 +167,7 @@ def build_webui(conversation: dict, user_id: str) -> Tuple[Dict[str, Any], str]:
                     "modelName": MODEL_NAME,
                     "modelIdx": 0,
                     "userContext": None,
-                    "lastSentence": extract_last_sentence(content),
+                    "lastSentence": extract_last_sentence(clean),
                     "usage": {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0},
                     "done": True,
                 }

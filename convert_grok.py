@@ -10,6 +10,15 @@ import uuid
 from datetime import datetime
 from typing import Any, Dict, List, Tuple
 
+INVALID_RE = re.compile(r"[\ue000-\uf8ff]")
+
+
+def sanitize_text(text: Any) -> str:
+    """Return ``text`` without private-use Unicode characters."""
+    if not isinstance(text, str):
+        return ""
+    return INVALID_RE.sub("", text)
+
 MODEL = "x-ai/grok-3"
 MODEL_NAME = "Grok 3"
 SUBDIR = "grok"
@@ -60,6 +69,7 @@ def parse_grok(data: Any) -> List[dict]:
             for resp in responses_sorted:
                 inner = resp.get("response", {})
                 text = inner.get("message")
+                text = sanitize_text(text)
                 if not text:
                     continue
                 sender = inner.get("sender") or "assistant"
@@ -71,7 +81,7 @@ def parse_grok(data: Any) -> List[dict]:
             if isinstance(root_node, dict):
                 part = root_node.get("message", {}).get("content", {}).get("parts", [])
                 if part:
-                    messages.append(("user", part[0], ts))
+                    messages.append(("user", sanitize_text(part[0]), ts))
             other_nodes = [v for k, v in mapping.items() if k != "client-created-root"]
 
             def sort_key(node: Any) -> float:
@@ -88,7 +98,7 @@ def parse_grok(data: Any) -> List[dict]:
                     continue
                 role = msg.get("author", {}).get("role", "assistant")
                 ts_val = msg.get("create_time") or msg.get("timestamp") or ts
-                messages.append((role, parts[0], parse_timestamp(ts_val, ts)))
+                messages.append((role, sanitize_text(parts[0]), parse_timestamp(ts_val, ts)))
         result.append({
             "title": title,
             "timestamp": ts,
@@ -105,12 +115,13 @@ def build_webui(conversation: dict, user_id: str) -> Tuple[Dict[str, Any], str]:
     prev_id: str | None = None
     for role, content, ts in conversation["messages"]:
         msg_id = str(uuid.uuid4())
+        clean = sanitize_text(content)
         msg = {
             "id": msg_id,
             "parentId": prev_id,
             "childrenIds": [],
             "role": role,
-            "content": content,
+            "content": clean,
             "timestamp": int(ts),
         }
         if role == "user":
@@ -122,7 +133,7 @@ def build_webui(conversation: dict, user_id: str) -> Tuple[Dict[str, Any], str]:
                     "modelName": MODEL_NAME,
                     "modelIdx": 0,
                     "userContext": None,
-                    "lastSentence": extract_last_sentence(content),
+                    "lastSentence": extract_last_sentence(clean),
                     "usage": {"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0},
                     "done": True,
                 }

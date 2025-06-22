@@ -5,7 +5,9 @@
 This importer tool has two Python scripts: one for converting the model JSON files to openweb-ui format JSON, the second for 
 creating a SQL script to import the JSON into the openweb-ui SQLite database.  
 
-The imported chats are given the tags `imported-chatgpt`, `imported-claude` and `imported-grok`.  
+The imported chats are given the tags `imported-chatgpt`, `imported-claude` and `imported-grok`.
+
+Any private-use Unicode characters occasionally found in model exports are stripped from the message text during conversion.
 
 *There were problems exporting chats from Gemini, so it's not currently supported. DeepSeek and others could be added without much effort.*
 
