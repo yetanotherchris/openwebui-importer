@@ -19,8 +19,8 @@ def sanitize_text(text: Any) -> str:
         return ""
     return INVALID_RE.sub("", text)
 
-MODEL = "openai/chatgpt-4o-latest"
-MODEL_NAME = "ChatGPT 4o (latest)"
+MODEL = "openai/GPT-5"
+MODEL_NAME = "OpenAI: GPT-5"
 SUBDIR = "chatgpt"
 
 

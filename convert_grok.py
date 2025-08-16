@@ -19,8 +19,8 @@ def sanitize_text(text: Any) -> str:
         return ""
     return INVALID_RE.sub("", text)
 
-MODEL = "x-ai/grok-3"
-MODEL_NAME = "Grok 3"
+MODEL = "x-ai/grok-4"
+MODEL_NAME = "Grok 4"
 SUBDIR = "grok"
 
 
