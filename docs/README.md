@@ -18,6 +18,17 @@ python .\convert_chatgpt.py --userid="get-this-from-your-webui.db" .\chatgpt.jso
 python .\create_sql.py ./output/chatgpt --tags="imported-chatgpt" --output=chatgpt.sql
 ```
 
+Full example for GPT and Grok:
+
+```
+python .\convert_chatgpt.py --userid="example-9cef-4387-8ee4-b82eb2e1c637" .\chatgpt.json
+python .\convert_chatgpt.py --userid="example-9cef-4387-8ee4-b82eb2e1c637" .\chatgpt.json
+python .\convert_grok.py --userid="example-9cef-4387-8ee4-b82eb2e1c637" .\grok.json      
+python .\create_sql.py ./output/chatgpt --tags="imported-chatgpt" --output=chatgpt.sql
+python .\create_sql.py ./output/grok --tags="imported-grok" --output=grok.sql
+# Now run the scripts inside DB Browser and hit save
+```
+
 ## Scripts
 
 Install the required Python dependencies first:

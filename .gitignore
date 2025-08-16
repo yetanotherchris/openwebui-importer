@@ -201,3 +201,4 @@ chatgpt.sql
 claude.sql
 grok.sql
 output/*
+example-usage.txt
