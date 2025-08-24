@@ -85,14 +85,6 @@ options:
   --output OUTPUT  Write SQL statements to this file
 ```
 
-### create-schema.py
-JSON schemas were originally used with the Model's export JSON. This script and the schemas are kept for reference.
-
-```
-Usage: python json_schema_generator.py <input_json_file>
-Output will be saved as <input_file>_schema.json
-```
-
 ## Example workflow
 
 1. Create an export from Claude, ChatGPT or Grok.

@@ -4,6 +4,13 @@ JSON Schema Generator
 
 This script reads a JSON file and generates a corresponding JSON Schema.
 It analyzes the structure and data types to create a comprehensive schema.
+
+JSON schemas were originally used with the Model's export JSON. This script and the schemas are kept for reference.
+
+```
+Usage: python json_schema_generator.py <input_json_file>
+Output will be saved as <input_file>_schema.json
+```
 """
 
 import json
