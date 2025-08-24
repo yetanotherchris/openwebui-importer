@@ -211,8 +211,14 @@ def convert_file(path: str, user_id: str, outdir: str) -> None:
         conv_id = conv.get("conversation_id")
         unique = conv_id if conv_id else conv_uuid
         fname = f"{slugify(conv['title'])}_{unique}.json"
+        outer = {
+            "id": "",
+            "user_id": user_id,
+            "title": conv.get("title", ""),
+            "chat": out
+        }
         with open(os.path.join(outdir, fname), "w", encoding="utf-8") as fh:
-            json.dump(out, fh, ensure_ascii=False, indent=2)
+            json.dump([outer], fh, ensure_ascii=False, indent=2)
 
 
 def run_cli() -> None:
