@@ -19,8 +19,8 @@ def sanitize_text(text: Any) -> str:
         return ""
     return INVALID_RE.sub("", text)
 
-MODEL = "anthropic/claude-3.7-sonnet"
-MODEL_NAME = "Claude 3.7 Sonnet"
+MODEL = "claude_4_5_with_thinking.claude-sonnet-4-5-20250929-think"
+MODEL_NAME = "anthropic/claude-4.5-sonnet-with-thinking"
 SUBDIR = "claude"
 
 
@@ -46,21 +46,107 @@ def parse_timestamp(value: Any, default: float) -> float:
     return default
 
 
+def _parse_iso_datetime(value: Any) -> datetime | None:
+    if isinstance(value, str):
+        try:
+            return datetime.fromisoformat(value.replace("Z", "+00:00"))
+        except ValueError:
+            return None
+    if isinstance(value, (int, float)):
+        return datetime.fromtimestamp(float(value))
+    return None
+
+
+def _format_reasoning_block(part: dict) -> str:
+    thinking_text = sanitize_text(part.get("thinking"))
+    if not thinking_text:
+        return ""
+    summary_text = ""
+    summaries = part.get("summaries")
+    if isinstance(summaries, list):
+        for entry in summaries:
+            if isinstance(entry, dict):
+                candidate = sanitize_text(entry.get("summary"))
+            else:
+                candidate = sanitize_text(entry)
+            if candidate:
+                summary_text = candidate
+                break
+    if not summary_text:
+        summary_text = "Thought process"
+
+    start_dt = _parse_iso_datetime(part.get("start_timestamp"))
+    stop_dt = _parse_iso_datetime(part.get("stop_timestamp"))
+    duration_attr = ""
+    if start_dt and stop_dt and stop_dt >= start_dt:
+        seconds = max(1, int(round((stop_dt - start_dt).total_seconds())))
+        duration_attr = f' duration="{seconds}"'
+
+    done_attr = "false" if part.get("cut_off") else "true"
+    quoted_lines = []
+    for line in thinking_text.splitlines():
+        if line:
+            quoted_lines.append(f"> {line}")
+        else:
+            quoted_lines.append(">")
+    quoted_text = "\n".join(quoted_lines) if quoted_lines else ""
+    return (
+        f'<details type="reasoning" done="{done_attr}"{duration_attr}>'
+        f"\n<summary>{summary_text}</summary>\n"
+        f"{quoted_text}\n"
+        "</details>"
+    )
+
+
+def _content_to_text(parts: list[Any]) -> str:
+    reasoning_segments: List[str] = []
+    text_segments: List[str] = []
+    for part in parts:
+        if not isinstance(part, dict):
+            continue
+        p_type = part.get("type")
+        if p_type == "thinking":
+            reasoning = _format_reasoning_block(part)
+            if reasoning:
+                reasoning_segments.append(reasoning)
+        elif p_type == "text":
+            text = sanitize_text(part.get("text"))
+            if text:
+                text_segments.append(text)
+    segments: List[str] = []
+    if reasoning_segments:
+        segments.append("\n".join(reasoning_segments))
+    if text_segments:
+        segments.append("\n\n".join(text_segments))
+    return "\n\n".join(segments) if segments else ""
+
+
+def _normalize_role(raw_role: Any, index: int) -> str:
+    if isinstance(raw_role, str):
+        lowered = raw_role.lower()
+        if lowered in {"user", "assistant"}:
+            return lowered
+        if lowered == "human":
+            return "user"
+        if lowered == "system":
+            return "assistant"
+    return "assistant" if index % 2 else "user"
+
+
 def _parse_message_list(msgs: list[Any], default_ts: float) -> List[Tuple[str, str, float]]:
     parsed: List[Tuple[str, str, float]] = []
     for idx, msg in enumerate(msgs):
         if not isinstance(msg, dict):
             continue
-        text = msg.get("text")
-        if not text and isinstance(msg.get("content"), list):
-            parts = [p.get("text", "") for p in msg.get("content", [])]
-            text = "".join(parts)
-        text = sanitize_text(text)
+        text = ""
+        if isinstance(msg.get("content"), list):
+            text = _content_to_text(msg["content"])
+        if not text:
+            text = sanitize_text(msg.get("text"))
         if not text:
             continue
-        role = msg.get("role") or msg.get("sender")
-        if role not in {"user", "assistant"}:
-            role = "assistant" if idx % 2 else "user"
+        raw_role = msg.get("role") or msg.get("sender")
+        role = _normalize_role(raw_role, idx)
         ts_val = msg.get("created_at") or msg.get("updated_at") or default_ts
         ts_val = parse_timestamp(ts_val, default_ts)
         parsed.append((role, text, ts_val))

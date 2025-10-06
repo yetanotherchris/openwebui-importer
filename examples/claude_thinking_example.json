@@ -1,0 +1,58 @@
+[
+  {
+    "uuid": "11111111-2222-3333-4444-555555555555",
+    "name": "Thinking Demo",
+    "created_at": "2025-01-01T00:00:00Z",
+    "updated_at": "2025-01-01T00:00:10Z",
+    "chat_messages": [
+      {
+        "uuid": "aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee",
+        "sender": "human",
+        "created_at": "2025-01-01T00:00:01Z",
+        "updated_at": "2025-01-01T00:00:01Z",
+        "text": "",
+        "content": [
+          {
+            "start_timestamp": "2025-01-01T00:00:01Z",
+            "stop_timestamp": "2025-01-01T00:00:01Z",
+            "type": "text",
+            "text": "Can you greet me?",
+            "citations": []
+          }
+        ],
+        "attachments": [],
+        "files": []
+      },
+      {
+        "uuid": "ffffffff-1111-2222-3333-444444444444",
+        "sender": "assistant",
+        "created_at": "2025-01-01T00:00:05Z",
+        "updated_at": "2025-01-01T00:00:05Z",
+        "text": "",
+        "content": [
+          {
+            "start_timestamp": "2025-01-01T00:00:05Z",
+            "stop_timestamp": "2025-01-01T00:00:07Z",
+            "type": "thinking",
+            "thinking": "The user asked for a greeting. I should respond warmly and invite further conversation.",
+            "summaries": [
+              {
+                "summary": "Planning a warm greeting"
+              }
+            ],
+            "cut_off": false
+          },
+          {
+            "start_timestamp": "2025-01-01T00:00:07Z",
+            "stop_timestamp": "2025-01-01T00:00:07Z",
+            "type": "text",
+            "text": "Hello there! It's great to hear from you.",
+            "citations": []
+          }
+        ],
+        "attachments": [],
+        "files": []
+      }
+    ]
+  }
+]
