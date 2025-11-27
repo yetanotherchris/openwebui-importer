@@ -14,8 +14,30 @@ Any private-use Unicode characters occasionally found in model exports are strip
 ## Quick start
 
 ```
-python .\convert_chatgpt.py --userid="get-this-from-your-webui.db" .\chatgpt.json   
+python .\convert_chatgpt.py --userid="get-this-from-your-webui.db" .\chatgpt.json
 python .\create_sql.py ./output/chatgpt --tags="imported-chatgpt" --output=chatgpt.sql
+```
+
+## Quickstart Docker
+
+```bash
+docker run --rm -v $(pwd)/data:/data \
+  ghcr.io/yetanotherchris/openwebui-importer:latest \
+  python convert_chatgpt.py --userid="your-user-id" --output-dir=/data/output /data/chatgpt.json
+
+docker run --rm -v $(pwd)/data:/data \
+  ghcr.io/yetanotherchris/openwebui-importer:latest \
+  python create_sql.py /data/output/chatgpt --tags="imported-chatgpt" --output=/data/chatgpt.sql
+```
+
+```powershell
+docker run --rm -v ${PWD}/data:/data `
+  ghcr.io/yetanotherchris/openwebui-importer:latest `
+  python convert_chatgpt.py --userid="your-user-id" --output-dir=/data/output /data/chatgpt.json
+
+docker run --rm -v ${PWD}/data:/data `
+  ghcr.io/yetanotherchris/openwebui-importer:latest `
+  python create_sql.py /data/output/chatgpt --tags="imported-chatgpt" --output=/data/chatgpt.sql
 ```
 
 Full example for GPT and Grok:
