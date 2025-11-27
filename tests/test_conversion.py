@@ -56,6 +56,12 @@ def test_claude_conversion(monkeypatch):
     assert result == expected
 
 
+def test_claude_thinking_conversion(monkeypatch):
+    result = _run_conversion(convert_claude, "examples/claude_thinking_example.json", monkeypatch)
+    expected = _load_expected("claude_thinking")
+    assert result == expected
+
+
 def test_grok_conversion(monkeypatch):
     result = _run_conversion(convert_grok, "examples/grok_example.json", monkeypatch)
     expected = _load_expected("grok")
@@ -66,5 +72,4 @@ def test_invalid_unicode(monkeypatch):
     result = _run_conversion(convert_chatgpt, "examples/invalid_unicode.json", monkeypatch)
     expected = _load_expected("invalid_unicode")
     assert result == expected
-
 

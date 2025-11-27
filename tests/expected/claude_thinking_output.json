@@ -1,0 +1,83 @@
+{
+  "id": "",
+  "title": "Thinking Demo",
+  "models": [
+    "claude_4_5_with_thinking.claude-sonnet-4-5-20250929-think"
+  ],
+  "params": {},
+  "history": {
+    "messages": {
+      "00000000-0000-0000-0000-000000000002": {
+        "id": "00000000-0000-0000-0000-000000000002",
+        "parentId": null,
+        "childrenIds": [
+          "00000000-0000-0000-0000-000000000003"
+        ],
+        "role": "user",
+        "content": "Can you greet me?",
+        "timestamp": 1735689601,
+        "models": [
+          "claude_4_5_with_thinking.claude-sonnet-4-5-20250929-think"
+        ]
+      },
+      "00000000-0000-0000-0000-000000000003": {
+        "id": "00000000-0000-0000-0000-000000000003",
+        "parentId": "00000000-0000-0000-0000-000000000002",
+        "childrenIds": [],
+        "role": "assistant",
+        "content": "<details type=\"reasoning\" done=\"true\" duration=\"2\">\n<summary>Planning a warm greeting</summary>\n> The user asked for a greeting. I should respond warmly and invite further conversation.\n</details>\n\nHello there! It's great to hear from you.",
+        "timestamp": 1735689605,
+        "model": "claude_4_5_with_thinking.claude-sonnet-4-5-20250929-think",
+        "modelName": "anthropic/claude-4.5-sonnet-with-thinking",
+        "modelIdx": 0,
+        "userContext": null,
+        "lastSentence": "It's great to hear from you.",
+        "usage": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "total_tokens": 0
+        },
+        "done": true
+      }
+    },
+    "currentId": "00000000-0000-0000-0000-000000000003"
+  },
+  "messages": [
+    {
+      "id": "00000000-0000-0000-0000-000000000002",
+      "parentId": null,
+      "childrenIds": [
+        "00000000-0000-0000-0000-000000000003"
+      ],
+      "role": "user",
+      "content": "Can you greet me?",
+      "timestamp": 1735689601,
+      "models": [
+        "claude_4_5_with_thinking.claude-sonnet-4-5-20250929-think"
+      ]
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000003",
+      "parentId": "00000000-0000-0000-0000-000000000002",
+      "childrenIds": [],
+      "role": "assistant",
+      "content": "<details type=\"reasoning\" done=\"true\" duration=\"2\">\n<summary>Planning a warm greeting</summary>\n> The user asked for a greeting. I should respond warmly and invite further conversation.\n</details>\n\nHello there! It's great to hear from you.",
+      "timestamp": 1735689605,
+      "model": "claude_4_5_with_thinking.claude-sonnet-4-5-20250929-think",
+      "modelName": "anthropic/claude-4.5-sonnet-with-thinking",
+      "modelIdx": 0,
+      "userContext": null,
+      "lastSentence": "It's great to hear from you.",
+      "usage": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "total_tokens": 0
+      },
+      "done": true
+    }
+  ],
+  "tags": [],
+  "timestamp": 1735689600000,
+  "files": [],
+  "userId": "user"
+}
