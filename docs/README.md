@@ -14,8 +14,61 @@ Any private-use Unicode characters occasionally found in model exports are strip
 ## Quick start
 
 ```
-python .\convert_chatgpt.py --userid="get-this-from-your-webui.db" .\chatgpt.json   
+python .\convert_chatgpt.py --userid="get-this-from-your-webui.db" .\chatgpt.json
 python .\create_sql.py ./output/chatgpt --tags="imported-chatgpt" --output=chatgpt.sql
+```
+
+## Quickstart Docker
+
+You can use the Docker image to run the conversion scripts without installing Python dependencies locally.
+
+### Using pre-built image from GitHub Container Registry
+
+Pull the latest image:
+
+```bash
+docker pull ghcr.io/yetanotherchris/openwebui-importer:latest
+```
+
+### Convert ChatGPT export
+
+```bash
+docker run --rm -v $(pwd)/data:/data \
+  ghcr.io/yetanotherchris/openwebui-importer:latest \
+  python convert_chatgpt.py --userid="your-user-id" --output-dir=/data/output /data/chatgpt.json
+```
+
+### Convert Claude export
+
+```bash
+docker run --rm -v $(pwd)/data:/data \
+  ghcr.io/yetanotherchris/openwebui-importer:latest \
+  python convert_claude.py --userid="your-user-id" --output-dir=/data/output /data/claude.json
+```
+
+### Convert Grok export
+
+```bash
+docker run --rm -v $(pwd)/data:/data \
+  ghcr.io/yetanotherchris/openwebui-importer:latest \
+  python convert_grok.py --userid="your-user-id" --output-dir=/data/output /data/grok.json
+```
+
+### Generate SQL from converted files
+
+```bash
+docker run --rm -v $(pwd)/data:/data \
+  ghcr.io/yetanotherchris/openwebui-importer:latest \
+  python create_sql.py /data/output/chatgpt --tags="imported-chatgpt" --output=/data/chatgpt.sql
+```
+
+### Building the Docker image locally
+
+If you want to build the image yourself:
+
+```bash
+docker build -t openwebui-importer .
+docker run --rm -v $(pwd)/data:/data openwebui-importer python create_sql.py --help
 ```
 
 Full example for GPT and Grok:
