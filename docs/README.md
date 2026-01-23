@@ -119,6 +119,32 @@ options:
   --output OUTPUT  Write SQL statements to this file
 ```
 
+### run_batch.py (Helper Script)
+
+```
+usage: run_batch.py [-h] --input-dir INPUT_DIR --type {aistudio,chatgpt,claude,grok} --user-id USER_ID [--output-dir OUTPUT_DIR] [--sql-output SQL_OUTPUT]
+
+Batch process chat exports and generate SQL for Open WebUI.
+
+options:
+  -h, --help            show this help message and exit
+  --input-dir INPUT_DIR
+                        Directory containing the source chat files
+  --type {aistudio,chatgpt,claude,grok}
+                        Source chat format
+  --user-id USER_ID     Open WebUI User ID to assign to these chats
+  --output-dir OUTPUT_DIR
+                        Directory for intermediate JSON files (default: output)
+  --sql-output SQL_OUTPUT
+                        Path to the final SQL file. If not specified, SQL generation is skipped.
+```
+
+Example:
+```bash
+python scripts/run_batch.py --input-dir ./my_chats --type aistudio --user-id "your-user-id" --sql-output aistudio_import.sql
+```
+This will convert all `.json` (and extensionless files for AI Studio) in `./my_chats` and generate `aistudio_import.sql`.
+
 ## Example workflow
 
 1. Create an export from AI Studio (Gemini), Claude, ChatGPT or Grok.
