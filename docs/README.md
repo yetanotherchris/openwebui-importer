@@ -1,11 +1,11 @@
 # openwebui-importer
 
-**Import Grok, Claude and ChatGPT chats into [open-webui](https://github.com/open-webui/open-webui).**
+**Import Grok, Claude, AI Studio and ChatGPT chats into [open-webui](https://github.com/open-webui/open-webui).**
 
 This importer tool has two Python scripts: one for converting the model JSON files to openweb-ui format JSON, the second for 
 creating a SQL script to import the JSON into the openweb-ui SQLite database.  
 
-The imported chats are given the tags `imported-chatgpt`, `imported-claude` and `imported-grok`.
+The imported chats are given the tags `imported-aistudio`, `imported-chatgpt`, `imported-claude` and `imported-grok`.
 
 Any private-use Unicode characters occasionally found in model exports are stripped from the message text during conversion.
 
@@ -16,6 +16,9 @@ Any private-use Unicode characters occasionally found in model exports are strip
 ```
 python .\convert_chatgpt.py --userid="get-this-from-your-webui.db" .\chatgpt.json
 python .\create_sql.py ./output/chatgpt --tags="imported-chatgpt" --output=chatgpt.sql
+--
+python .\convert_aistudio.py --userid="get-this-from-your-webui.db" .\aistudio_example.json
+python .\create_sql.py ./output/aistudio --tags="imported-aistudio" --output=aistudio.sql
 ```
 
 ## Quickstart Docker
@@ -44,9 +47,10 @@ Full example for GPT and Grok:
 
 ```
 python .\convert_chatgpt.py --userid="example-9cef-4387-8ee4-b82eb2e1c637" .\chatgpt.json
-python .\convert_chatgpt.py --userid="example-9cef-4387-8ee4-b82eb2e1c637" .\chatgpt.json
+python .\convert_aistudio.py --userid="example-9cef-4387-8ee4-b82eb2e1c637" .\aistudio_example.json
 python .\convert_grok.py --userid="example-9cef-4387-8ee4-b82eb2e1c637" .\grok.json      
 python .\create_sql.py ./output/chatgpt --tags="imported-chatgpt" --output=chatgpt.sql
+python .\create_sql.py ./output/aistudio --tags="imported-aistudio" --output=aistudio.sql
 python .\create_sql.py ./output/grok --tags="imported-grok" --output=grok.sql
 # Now run the scripts inside DB Browser and hit save
 ```
@@ -83,6 +87,14 @@ usage: convert_claude.py [-h] --userid USERID [--output-dir OUTPUT_DIR] files [f
 Convert Claude exports to open-webui JSON
 ```
 
+### convert_aistudio.py
+
+```
+usage: convert_aistudio.py [-h] --userid USERID [--output-dir OUTPUT_DIR] files [files ...]
+
+Convert AI Studio exports to open-webui JSON
+```
+
 All converter scripts name the output files using the original conversation ID
 so running them again will produce the same filename for the same conversation.
 Converted files are saved in a subdirectory named after the model (for example
@@ -109,7 +121,7 @@ options:
 
 ## Example workflow
 
-1. Create an export from Claude, ChatGPT or Grok.
+1. Create an export from AI Studio (Gemini), Claude, ChatGPT or Grok.
 2. Unzip the archive and locate the JSON file (for Grok this is `prod-grok-backend.json`).
 3. Convert the export to open-webui JSON using the appropriate script:
    ```bash

@@ -22,7 +22,7 @@ def sanitize_text(text: Any) -> str:
 
 MODEL = "google/gemini"
 MODEL_NAME = "Gemini"
-SUBDIR = "gemini"
+SUBDIR = "aistudio"
 
 
 def extract_last_sentence(text: str) -> str:
@@ -47,10 +47,10 @@ def parse_timestamp(value: Any, default: float) -> float:
     return default
 
 
-def parse_gemini(data: Any, default_title: str = "Untitled") -> List[dict]:
+def parse_aistudio(data: Any, default_title: str = "Untitled") -> List[dict]:
     # Handle list of conversations if applicable (though example was a single dict)
     if isinstance(data, list):
-        return [c for item in data for c in parse_gemini(item, default_title)]
+        return [c for item in data for c in parse_aistudio(item, default_title)]
         
     if not isinstance(data, dict):
         return []
@@ -61,7 +61,7 @@ def parse_gemini(data: Any, default_title: str = "Untitled") -> List[dict]:
     chunks = data.get("chunkedPrompt", {}).get("chunks", [])
     if not chunks and "conversations" in data:
          # Fallback if it's a different format wrapper
-         return parse_gemini(data["conversations"], default_title)
+         return parse_aistudio(data["conversations"], default_title)
 
     messages = []
     ts = time.time()  # Default timestamp as none are provided in the schema
@@ -189,7 +189,7 @@ def convert_file(path: str, user_id: str, outdir: str) -> None:
 
     # Use filename as default title
     filename_title = os.path.splitext(os.path.basename(path))[0]
-    conversations = parse_gemini(data, default_title=filename_title)
+    conversations = parse_aistudio(data, default_title=filename_title)
     
     os.makedirs(outdir, exist_ok=True)
     for conv in conversations:
@@ -205,8 +205,8 @@ def convert_file(path: str, user_id: str, outdir: str) -> None:
 
 
 def run_cli() -> None:
-    parser = argparse.ArgumentParser(description="Convert Gemini exports to open-webui JSON")
-    parser.add_argument("files", nargs="+", help="Gemini export JSON files")
+    parser = argparse.ArgumentParser(description="Convert AI Studio exports to open-webui JSON")
+    parser.add_argument("files", nargs="+", help="AI Studio export JSON files")
     parser.add_argument("--userid", required=True, help="User ID for output files")
     parser.add_argument("--output-dir", default="output", help="Directory for output JSON files")
     args = parser.parse_args()
