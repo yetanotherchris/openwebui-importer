@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "AI Studio Export Schema",
+  "description": "Schema for AI Studio conversation exports",
+  "type": "object",
+  "properties": {
+    "runSettings": {
+      "type": "object"
+    },
+    "systemInstruction": {
+      "type": "object"
+    },
+    "chunkedPrompt": {
+      "type": "object",
+      "properties": {
+        "chunks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "role": {
+                "type": "string",
+                "enum": ["user", "model", "system"]
+              },
+              "text": {
+                "type": "string"
+              },
+              "tokenCount": {
+                "type": "integer"
+              },
+              "isThought": {
+                "type": "boolean"
+              },
+              "parts": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "thought": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              },
+              "driveImage": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "required": ["role"]
+          }
+        }
+      }
+    },
+    "pendingInputs": {
+      "type": "array"
+    }
+  }
+}
