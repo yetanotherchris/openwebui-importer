@@ -1,0 +1,41 @@
+name: Claude PR Review
+
+on:
+  # Respond to @claude mentions in comments
+  issue_comment:
+    types: [created, edited]
+  pull_request_review_comment:
+    types: [created, edited]
+
+  # Optional: Automatic review on PR open/update
+  # pull_request:
+  #   types: [opened, synchronize]
+
+jobs:
+  claude:
+    runs-on: ubuntu-latest
+    # Only run if comment contains @claude
+    if: github.event_name == 'pull_request' || contains(github.event.comment.body, '@claude')
+
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      checks: write
+
+    steps:
+      - name: Claude Code Action
+        uses: anthropics/claude-code-action@v1
+        with:
+          github_app_id: ${{ secrets.GITHUB_APP_ID }}
+          github_app_private_key: ${{ secrets.GITHUB_APP_PRIVATE_KEY }}
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+
+          # Optional: Custom prompt for automatic reviews (uncomment pull_request trigger above)
+          # prompt: |
+          #   Review this PR for:
+          #   - Code quality and best practices
+          #   - Potential bugs or issues
+          #   - Security concerns
+          #   - Performance considerations
+          #   - Documentation completeness
