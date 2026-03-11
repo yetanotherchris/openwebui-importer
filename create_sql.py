@@ -56,12 +56,25 @@ def tag_upserts(user_id: str, meta_tags: list[str]) -> list[str]:
 
 def json_to_sql(path: str, tags: list[str]) -> tuple[str, str]:
     data = load_json(path)
+
+    if isinstance(data, list):
+        # new format produced by convert_chatgpt.py: a list with a single object
+        data = data[0]
+        if 'chat' in data and 'user_id' in data:
+            user_id = data.get("user_id")
+            data = data['chat']
+        else:
+            user_id = None
+    else:
+        # old format: top-level object with userId field
+        user_id = data.get("userId")
+
+    if not user_id:
+        raise ValueError(f"userId missing in {path}")
+
     chat_json = json.dumps(data, ensure_ascii=True)
     chat_json = escape_sql_string(chat_json)
 
-    user_id = data.get("userId")
-    if not user_id:
-        raise ValueError(f"userId missing in {path}")
     title = escape_sql_string(data.get("title", ""))
     timestamp_ms = data.get("timestamp", 0)
     created_at = int(int(timestamp_ms) / 1000)
