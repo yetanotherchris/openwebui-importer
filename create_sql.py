@@ -36,6 +36,7 @@ def tag_upserts(user_id: str, meta_tags: list[str]) -> list[str]:
         ("imported-grok", "imported-grok"),
         ("imported-chatgpt", "imported-chatgpt"),
         ("imported-claude", "imported-claude"),
+        ("imported-openrouter", "imported-openrouter"),
     ]
     for t in meta_tags:
         slug = slugify(t)
