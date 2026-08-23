@@ -57,7 +57,7 @@ python .\create_sql.py ./output/grok --tags="imported-grok" --output=grok.sql
 
 example for Openrouter:
 ```
-python .\convert_openrouter.py --userid="get-this-from-your-webui.db" .\chatgpt.json
+python .\convert_openrouter.py --userid="get-this-from-your-webui.db" .\openrouter.json
 
 # The output file output/openrouter/openrouter_import.json can be imported directly
 via Open-WebUI: Settings → Data → Import Chat History.
