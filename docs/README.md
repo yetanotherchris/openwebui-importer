@@ -19,11 +19,6 @@ python .\create_sql.py ./output/chatgpt --tags="imported-chatgpt" --output=chatg
 --
 python .\convert_aistudio.py --userid="get-this-from-your-webui.db" .\aistudio_example.json
 python .\create_sql.py ./output/aistudio --tags="imported-aistudio" --output=aistudio.sql
---
-python .\convert_openrouter.py --userid="get-this-from-your-webui.db" .\chatgpt.json
-
-The output file output/openrouter/openrouter_import.json can be imported directly
-via Open-WebUI: Settings → Data → Import Chat History.
 ```
 
 ## Quickstart Docker
@@ -60,6 +55,13 @@ python .\create_sql.py ./output/grok --tags="imported-grok" --output=grok.sql
 # Now run the scripts inside DB Browser and hit save
 ```
 
+example for Openrouter:
+```
+python .\convert_openrouter.py --userid="get-this-from-your-webui.db" .\chatgpt.json
+
+# The output file output/openrouter/openrouter_import.json can be imported directly
+via Open-WebUI: Settings → Data → Import Chat History.
+```
 ## Scripts
 
 Install the required Python dependencies first:
@@ -98,6 +100,14 @@ Convert Claude exports to open-webui JSON
 usage: convert_aistudio.py [-h] --userid USERID [--output-dir OUTPUT_DIR] files [files ...]
 
 Convert AI Studio exports to open-webui JSON
+```
+
+### convert_openrouter.py
+
+```
+usage: convert_openrouter.py [-h] --userid USERID [--output-dir OUTPUT_DIR] files [files ...]
+
+Convert Openrouter exports to open-webui JSON
 ```
 
 All converter scripts name the output files using the original conversation ID
