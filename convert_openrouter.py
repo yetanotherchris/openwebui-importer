@@ -223,7 +223,7 @@ def build_webui(conversation: dict, user_id: str) -> Dict[str, Any]:
         messages_list.append(msg)
         prev_id = msg_id
     
-    # 构建 chat 内部对象
+    # Build the inner chat object
     chat_obj = {
         "id": conv_uuid,
         "title": conversation["title"],
