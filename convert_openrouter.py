@@ -292,7 +292,7 @@ def convert_file(path: str, user_id: str, outdir: str) -> None:
         msg_count = len(conv["messages"])
         print(f"✅ Processed: {conv['title']} ({msg_count} messages)")
     
-    # 输出为单个文件（数组格式）
+    # Write everything to a single output file (array format)
     output_path = os.path.join(outdir, "openrouter_import.json")
     with open(output_path, "w", encoding="utf-8") as fh:
         json.dump(all_chats, fh, ensure_ascii=False, indent=2)
