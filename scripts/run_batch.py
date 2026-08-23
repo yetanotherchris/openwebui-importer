@@ -32,7 +32,7 @@ Example usage:
         """
     )
     parser.add_argument("--input-dir", required=True, help="Directory containing the source chat files")
-    parser.add_argument("--type", required=True, choices=["aistudio", "chatgpt", "claude", "grok"], help="Source chat format")
+    parser.add_argument("--type", required=True, choices=["aistudio", "chatgpt", "claude", "grok", "openrouter"], help="Source chat format")
     parser.add_argument("--user-id", required=True, help="Open WebUI User ID to assign to these chats")
     parser.add_argument("--output-dir", default="output", help="Directory for intermediate JSON files (default: output)")
     parser.add_argument("--sql-output", help="Path to the final SQL file. If not specified, SQL generation is skipped.")
