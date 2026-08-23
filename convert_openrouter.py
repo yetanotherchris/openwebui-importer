@@ -254,13 +254,6 @@ def build_webui(conversation: dict, user_id: str) -> Dict[str, Any]:
     return webui_obj
 
 
-def slugify(text: str) -> str:
-    """Convert text to a safe filename slug."""
-    text = re.sub(r"\s+", "_", text.strip())
-    text = re.sub(r"[^a-zA-Z0-9_\-]", "", text)
-    return text[:50] or "chat"
-
-
 def convert_file(path: str, user_id: str, outdir: str) -> None:
     """Convert a single OpenRouter export file."""
     print(f"📂 Reading file: {path}")
