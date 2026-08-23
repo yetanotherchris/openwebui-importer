@@ -236,7 +236,7 @@ def build_webui(conversation: dict, user_id: str) -> Dict[str, Any]:
         "timestamp": int(conversation["timestamp"] * 1000),
     }
     
-    # 构建完整的外层对象（符合 Open-WebUI 导入格式）
+    # Build the full outer object (matching Open-WebUI's import format)
     webui_obj = {
         "id": conv_uuid,
         "user_id": user_id,
