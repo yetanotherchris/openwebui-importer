@@ -1,14 +1,15 @@
 # openwebui-importer
 
-**Import Grok, Claude, AI Studio (Gemini) and ChatGPT chats into [open-webui](https://github.com/open-webui/open-webui).**
+**Import Grok, Claude, AI Studio (Gemini), ChatGPT and Openrouter chats into [open-webui](https://github.com/open-webui/open-webui).**
 
 This importer tool has two Python scripts: one for converting the model JSON files to openweb-ui format JSON, the second for 
 creating a SQL script to import the JSON into the openweb-ui SQLite database.  
 
-The imported chats are given the tags `imported-aistudio`, `imported-chatgpt`, `imported-claude` and `imported-grok`.
+The imported chats are given the tags `imported-aistudio`, `imported-chatgpt`, `imported-claude`, `imported-openrouter` and `imported-grok`.
 
 Any private-use Unicode characters occasionally found in model exports are stripped from the message text during conversion.
 
+OpenRouter Playground stores chat history in browser localStorage and exports in `orpg.3.0` format. This script handles that specific format and outputs a single JSON file ready for direct import via Open-WebUI's built-in import feature.
 
 ## Quick start
 
@@ -18,6 +19,11 @@ python .\create_sql.py ./output/chatgpt --tags="imported-chatgpt" --output=chatg
 --
 python .\convert_aistudio.py --userid="get-this-from-your-webui.db" .\aistudio_example.json
 python .\create_sql.py ./output/aistudio --tags="imported-aistudio" --output=aistudio.sql
+--
+python .\convert_openrouter.py --userid="get-this-from-your-webui.db" .\chatgpt.json
+
+The output file output/openrouter/openrouter_import.json can be imported directly
+via Open-WebUI: Settings → Data → Import Chat History.
 ```
 
 ## Quickstart Docker
