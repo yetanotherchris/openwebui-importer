@@ -283,7 +283,7 @@ def convert_file(path: str, user_id: str, outdir: str) -> None:
     
     os.makedirs(outdir, exist_ok=True)
     
-    # 收集所有对话到一个数组里（Open-WebUI 导入需要数组格式）
+    # Collect all conversations into a single array (Open-WebUI import requires an array format)
     all_chats = []
     
     for conv in conversations:
