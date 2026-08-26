@@ -7,7 +7,7 @@ import os
 import re
 import time
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Any, Dict, List, Tuple
 
 INVALID_RE = re.compile(r"[\ue000-\uf8ff]")
@@ -53,7 +53,16 @@ def _parse_iso_datetime(value: Any) -> datetime | None:
         except ValueError:
             return None
     if isinstance(value, (int, float)):
-        return datetime.fromtimestamp(float(value))
+        # Claude's own start_timestamp/stop_timestamp are always ISO strings
+        # with a Z, i.e. UTC. This branch exists for other callers of the
+        # same helper, but datetime.fromtimestamp() without a tz interprets
+        # the value in the *local* system timezone, not UTC. Mixed with the
+        # string branch above (always UTC), that produced two bugs at once:
+        # a wrong duration on any machine not set to UTC, and a hard crash
+        # when the two were compared, since Python refuses to compare an
+        # aware datetime against a naive one. Pinning this to UTC matches the
+        # string branch and makes the two comparable.
+        return datetime.fromtimestamp(float(value), tz=timezone.utc)
     return None
 
 
@@ -98,9 +107,52 @@ def _format_reasoning_block(part: dict) -> str:
     )
 
 
+def _format_tool_use(part: dict) -> str:
+    name = part.get("name") or "tool"
+    tool_input = part.get("input")
+    try:
+        input_str = json.dumps(tool_input, ensure_ascii=False) if tool_input else ""
+    except TypeError:
+        input_str = str(tool_input)
+    header = f"🔧 used **{name}**"
+    return f"{header}\n```json\n{input_str}\n```" if input_str else header
+
+
+def _format_tool_result(part: dict) -> str:
+    content = part.get("content")
+    text = ""
+    if isinstance(content, list):
+        pieces = []
+        for entry in content:
+            if isinstance(entry, dict) and entry.get("type") == "text":
+                piece = sanitize_text(entry.get("text"))
+                if piece:
+                    pieces.append(piece)
+            elif isinstance(entry, str):
+                piece = sanitize_text(entry)
+                if piece:
+                    pieces.append(piece)
+        text = "\n".join(pieces)
+    elif isinstance(content, str):
+        text = sanitize_text(content)
+    if not text:
+        return ""
+    return f"↳ tool result:\n{text}"
+
+
 def _content_to_text(parts: list[Any]) -> str:
     reasoning_segments: List[str] = []
-    text_segments: List[str] = []
+    # Everything that isn't a "thinking" block, in the order Claude produced
+    # it. tool_use and tool_result used to have no handler at all: a real
+    # export where the assistant called a tool (web search, code execution,
+    # the analysis tool — any of these produce this same content shape) had
+    # that content silently discarded. When a turn's ONLY content was a tool
+    # call and its result, with the answer arriving in a later turn, the
+    # whole message vanished from the import: _parse_message_list drops any
+    # message whose extracted text comes back empty. That is not a rendering
+    # nuance, it is conversation history disappearing with no error and
+    # nothing in the output hinting that anything is missing.
+    other_segments: List[str] = []
     for part in parts:
         if not isinstance(part, dict):
             continue
@@ -112,12 +164,27 @@ def _content_to_text(parts: list[Any]) -> str:
         elif p_type == "text":
             text = sanitize_text(part.get("text"))
             if text:
-                text_segments.append(text)
+                other_segments.append(text)
+        elif p_type == "tool_use":
+            block = _format_tool_use(part)
+            if block:
+                other_segments.append(block)
+        elif p_type == "tool_result":
+            block = _format_tool_result(part)
+            if block:
+                other_segments.append(block)
+        elif p_type:
+            # Anything else (image, document, and whatever Anthropic adds
+            # next) is content we don't know how to render, but dropping it
+            # with no trace is worse than an honest placeholder: a reader
+            # comparing the import against the original at least knows to
+            # look, instead of assuming the conversation was this short.
+            other_segments.append(f"[unsupported content: type={p_type}]")
     segments: List[str] = []
     if reasoning_segments:
         segments.append("\n".join(reasoning_segments))
-    if text_segments:
-        segments.append("\n\n".join(text_segments))
+    if other_segments:
+        segments.append("\n\n".join(other_segments))
     return "\n\n".join(segments) if segments else ""
 
 

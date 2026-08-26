@@ -1,0 +1,177 @@
+{
+  "id": "",
+  "title": "Tokyo weather",
+  "models": [
+    "claude_4_5_with_thinking.claude-sonnet-4-5-20250929-think"
+  ],
+  "params": {},
+  "history": {
+    "messages": {
+      "00000000-0000-0000-0000-000000000002": {
+        "id": "00000000-0000-0000-0000-000000000002",
+        "parentId": null,
+        "childrenIds": [
+          "00000000-0000-0000-0000-000000000003"
+        ],
+        "role": "user",
+        "content": "What's the weather in Tokyo right now?",
+        "timestamp": 1767225601,
+        "models": [
+          "claude_4_5_with_thinking.claude-sonnet-4-5-20250929-think"
+        ]
+      },
+      "00000000-0000-0000-0000-000000000003": {
+        "id": "00000000-0000-0000-0000-000000000003",
+        "parentId": "00000000-0000-0000-0000-000000000002",
+        "childrenIds": [
+          "00000000-0000-0000-0000-000000000004"
+        ],
+        "role": "assistant",
+        "content": "🔧 used **web_search**\n```json\n{\"query\": \"Tokyo weather now\"}\n```\n\n↳ tool result:\n68F, clear skies\n\nIt's 68F and clear in Tokyo right now.",
+        "timestamp": 1767225602,
+        "model": "claude_4_5_with_thinking.claude-sonnet-4-5-20250929-think",
+        "modelName": "anthropic/claude-4.5-sonnet-with-thinking",
+        "modelIdx": 0,
+        "userContext": null,
+        "lastSentence": "🔧 used **web_search**\n```json\n{\"query\": \"Tokyo weather now\"}\n```\n\n↳ tool result:\n68F, clear skies\n\nIt's 68F and clear in Tokyo right now.",
+        "usage": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "total_tokens": 0
+        },
+        "done": true
+      },
+      "00000000-0000-0000-0000-000000000004": {
+        "id": "00000000-0000-0000-0000-000000000004",
+        "parentId": "00000000-0000-0000-0000-000000000003",
+        "childrenIds": [
+          "00000000-0000-0000-0000-000000000005"
+        ],
+        "role": "user",
+        "content": "Also, is it going to rain tomorrow?",
+        "timestamp": 1767225603,
+        "models": [
+          "claude_4_5_with_thinking.claude-sonnet-4-5-20250929-think"
+        ]
+      },
+      "00000000-0000-0000-0000-000000000005": {
+        "id": "00000000-0000-0000-0000-000000000005",
+        "parentId": "00000000-0000-0000-0000-000000000004",
+        "childrenIds": [
+          "00000000-0000-0000-0000-000000000006"
+        ],
+        "role": "assistant",
+        "content": "🔧 used **web_search**\n```json\n{\"query\": \"Tokyo forecast tomorrow\"}\n```\n\n↳ tool result:\n60% chance of rain",
+        "timestamp": 1767225604,
+        "model": "claude_4_5_with_thinking.claude-sonnet-4-5-20250929-think",
+        "modelName": "anthropic/claude-4.5-sonnet-with-thinking",
+        "modelIdx": 0,
+        "userContext": null,
+        "lastSentence": "60% chance of rain",
+        "usage": {
+          "prompt_tokens": 0,
+          "completion_tokens": 0,
+          "total_tokens": 0
+        },
+        "done": true
+      },
+      "00000000-0000-0000-0000-000000000006": {
+        "id": "00000000-0000-0000-0000-000000000006",
+        "parentId": "00000000-0000-0000-0000-000000000005",
+        "childrenIds": [],
+        "role": "user",
+        "content": "[unsupported content: type=image]",
+        "timestamp": 1767225605,
+        "models": [
+          "claude_4_5_with_thinking.claude-sonnet-4-5-20250929-think"
+        ]
+      }
+    },
+    "currentId": "00000000-0000-0000-0000-000000000006"
+  },
+  "messages": [
+    {
+      "id": "00000000-0000-0000-0000-000000000002",
+      "parentId": null,
+      "childrenIds": [
+        "00000000-0000-0000-0000-000000000003"
+      ],
+      "role": "user",
+      "content": "What's the weather in Tokyo right now?",
+      "timestamp": 1767225601,
+      "models": [
+        "claude_4_5_with_thinking.claude-sonnet-4-5-20250929-think"
+      ]
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000003",
+      "parentId": "00000000-0000-0000-0000-000000000002",
+      "childrenIds": [
+        "00000000-0000-0000-0000-000000000004"
+      ],
+      "role": "assistant",
+      "content": "🔧 used **web_search**\n```json\n{\"query\": \"Tokyo weather now\"}\n```\n\n↳ tool result:\n68F, clear skies\n\nIt's 68F and clear in Tokyo right now.",
+      "timestamp": 1767225602,
+      "model": "claude_4_5_with_thinking.claude-sonnet-4-5-20250929-think",
+      "modelName": "anthropic/claude-4.5-sonnet-with-thinking",
+      "modelIdx": 0,
+      "userContext": null,
+      "lastSentence": "🔧 used **web_search**\n```json\n{\"query\": \"Tokyo weather now\"}\n```\n\n↳ tool result:\n68F, clear skies\n\nIt's 68F and clear in Tokyo right now.",
+      "usage": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "total_tokens": 0
+      },
+      "done": true
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000004",
+      "parentId": "00000000-0000-0000-0000-000000000003",
+      "childrenIds": [
+        "00000000-0000-0000-0000-000000000005"
+      ],
+      "role": "user",
+      "content": "Also, is it going to rain tomorrow?",
+      "timestamp": 1767225603,
+      "models": [
+        "claude_4_5_with_thinking.claude-sonnet-4-5-20250929-think"
+      ]
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000005",
+      "parentId": "00000000-0000-0000-0000-000000000004",
+      "childrenIds": [
+        "00000000-0000-0000-0000-000000000006"
+      ],
+      "role": "assistant",
+      "content": "🔧 used **web_search**\n```json\n{\"query\": \"Tokyo forecast tomorrow\"}\n```\n\n↳ tool result:\n60% chance of rain",
+      "timestamp": 1767225604,
+      "model": "claude_4_5_with_thinking.claude-sonnet-4-5-20250929-think",
+      "modelName": "anthropic/claude-4.5-sonnet-with-thinking",
+      "modelIdx": 0,
+      "userContext": null,
+      "lastSentence": "60% chance of rain",
+      "usage": {
+        "prompt_tokens": 0,
+        "completion_tokens": 0,
+        "total_tokens": 0
+      },
+      "done": true
+    },
+    {
+      "id": "00000000-0000-0000-0000-000000000006",
+      "parentId": "00000000-0000-0000-0000-000000000005",
+      "childrenIds": [],
+      "role": "user",
+      "content": "[unsupported content: type=image]",
+      "timestamp": 1767225605,
+      "models": [
+        "claude_4_5_with_thinking.claude-sonnet-4-5-20250929-think"
+      ]
+    }
+  ],
+  "tags": [],
+  "timestamp": 1767225600000,
+  "files": [],
+  "userId": "user"
+}

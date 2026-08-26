@@ -1,0 +1,120 @@
+[
+  {
+    "uuid": "7b1e2b3a-1111-4a1a-9c1a-000000000001",
+    "name": "Tokyo weather",
+    "created_at": "2026-01-01T00:00:00.000000Z",
+    "updated_at": "2026-01-01T00:05:00.000000Z",
+    "account": {
+      "uuid": "9f6b23a1-4e97-43b3-b2e1-dc6e3f94d9c8"
+    },
+    "chat_messages": [
+      {
+        "uuid": "m1",
+        "text": "",
+        "content": [
+          {
+            "type": "text",
+            "text": "What's the weather in Tokyo right now?"
+          }
+        ],
+        "sender": "human",
+        "created_at": "2026-01-01T00:00:01.000000Z",
+        "updated_at": "2026-01-01T00:00:01.000000Z",
+        "attachments": [],
+        "files": []
+      },
+      {
+        "uuid": "m2",
+        "text": "",
+        "content": [
+          {
+            "type": "tool_use",
+            "name": "web_search",
+            "input": {
+              "query": "Tokyo weather now"
+            }
+          },
+          {
+            "type": "tool_result",
+            "content": [
+              {
+                "type": "text",
+                "text": "68F, clear skies"
+              }
+            ]
+          },
+          {
+            "type": "text",
+            "text": "It's 68F and clear in Tokyo right now."
+          }
+        ],
+        "sender": "assistant",
+        "created_at": "2026-01-01T00:00:02.000000Z",
+        "updated_at": "2026-01-01T00:00:02.000000Z",
+        "attachments": [],
+        "files": []
+      },
+      {
+        "uuid": "m3",
+        "text": "",
+        "content": [
+          {
+            "type": "text",
+            "text": "Also, is it going to rain tomorrow?"
+          }
+        ],
+        "sender": "human",
+        "created_at": "2026-01-01T00:00:03.000000Z",
+        "updated_at": "2026-01-01T00:00:03.000000Z",
+        "attachments": [],
+        "files": []
+      },
+      {
+        "uuid": "m4",
+        "text": "",
+        "content": [
+          {
+            "type": "tool_use",
+            "name": "web_search",
+            "input": {
+              "query": "Tokyo forecast tomorrow"
+            }
+          },
+          {
+            "type": "tool_result",
+            "content": [
+              {
+                "type": "text",
+                "text": "60% chance of rain"
+              }
+            ]
+          }
+        ],
+        "sender": "assistant",
+        "created_at": "2026-01-01T00:00:04.000000Z",
+        "updated_at": "2026-01-01T00:00:04.000000Z",
+        "attachments": [],
+        "files": []
+      },
+      {
+        "uuid": "m5",
+        "text": "",
+        "content": [
+          {
+            "type": "image",
+            "source": {
+              "type": "base64",
+              "media_type": "image/png",
+              "data": "iVBORw0KGgo="
+            }
+          }
+        ],
+        "sender": "human",
+        "created_at": "2026-01-01T00:00:05.000000Z",
+        "updated_at": "2026-01-01T00:00:05.000000Z",
+        "attachments": [],
+        "files": []
+      }
+    ]
+  }
+]
