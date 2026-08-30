@@ -31,11 +31,6 @@ docker run --rm -v open-webui:/data alpine sh -c \
   "apk add --no-cache sqlite >/dev/null && sqlite3 /data/webui.db 'select id, email, name from user;'"
 ```
 
-```powershell
-docker run --rm -v open-webui:/data alpine sh -c `
-  "apk add --no-cache sqlite >/dev/null && sqlite3 /data/webui.db 'select id, email, name from user;'"
-```
-
 Replace `open-webui` with your actual volume name if your deployment
 names it differently — check with `docker volume ls`. The `id` column is
 the value every `--userid` flag below wants.
@@ -48,26 +43,6 @@ still has it open risks a corrupted WAL file, which costs a lot more time
 than the import was meant to save.
 
 ## Quick start
-
-Examples below are given twice, once for Windows (PowerShell or cmd,
-paths written `.\like\this`) and once for Unix-like shells — Linux,
-macOS, WSL (paths written `./like/this`). Both invoke the same scripts;
-only the path separator differs.
-
-**Windows:**
-
-```
-python .\convert_chatgpt.py --userid="get-this-from-your-webui.db" .\chatgpt.json
-python .\create_sql.py .\output\chatgpt --tags="imported-chatgpt" --output=chatgpt.sql
---
-python .\convert_aistudio.py --userid="get-this-from-your-webui.db" .\aistudio_example.json
-python .\create_sql.py .\output\aistudio --tags="imported-aistudio" --output=aistudio.sql
---
-python .\convert_claude.py --userid="get-this-from-your-webui.db" .\claude_example.json
-python .\create_sql.py .\output\claude --tags="imported-claude" --output=claude.sql
-```
-
-**Unix (Linux/macOS/WSL):**
 
 ```
 python ./convert_chatgpt.py --userid="get-this-from-your-webui.db" ./chatgpt.json
@@ -104,22 +79,6 @@ docker run --rm -v ${PWD}/data:/data `
 
 Full example for GPT, AI Studio, Grok and Claude:
 
-**Windows:**
-
-```
-python .\convert_chatgpt.py --userid="example-9cef-4387-8ee4-b82eb2e1c637" .\chatgpt.json
-python .\convert_aistudio.py --userid="example-9cef-4387-8ee4-b82eb2e1c637" .\aistudio_example.json
-python .\convert_grok.py --userid="example-9cef-4387-8ee4-b82eb2e1c637" .\grok.json
-python .\convert_claude.py --userid="example-9cef-4387-8ee4-b82eb2e1c637" .\claude_example.json
-python .\create_sql.py .\output\chatgpt --tags="imported-chatgpt" --output=chatgpt.sql
-python .\create_sql.py .\output\aistudio --tags="imported-aistudio" --output=aistudio.sql
-python .\create_sql.py .\output\grok --tags="imported-grok" --output=grok.sql
-python .\create_sql.py .\output\claude --tags="imported-claude" --output=claude.sql
-# Now run the scripts inside DB Browser and hit save
-```
-
-**Unix (Linux/macOS/WSL):**
-
 ```
 python ./convert_chatgpt.py --userid="example-9cef-4387-8ee4-b82eb2e1c637" ./chatgpt.json
 python ./convert_aistudio.py --userid="example-9cef-4387-8ee4-b82eb2e1c637" ./aistudio_example.json
@@ -133,17 +92,6 @@ python ./create_sql.py ./output/claude --tags="imported-claude" --output=claude.
 ```
 
 Example for Openrouter:
-
-**Windows:**
-
-```
-python .\convert_openrouter.py --userid="get-this-from-your-webui.db" .\openrouter.json
-
-# The output file output\openrouter\openrouter_import.json can be imported directly
-# via Open-WebUI: Settings → Data → Import Chat History.
-```
-
-**Unix (Linux/macOS/WSL):**
 
 ```
 python ./convert_openrouter.py --userid="get-this-from-your-webui.db" ./openrouter.json
@@ -269,7 +217,6 @@ This will convert all `.json` (and extensionless files for AI Studio) in `./my_c
    ```bash
    python ./convert_claude.py --userid="d95194d2-9cef-4387-8ee4-b82eb2e1c637" ./conversations.json
    ```
-   (On Windows, replace the leading `./` with `.\` in either command.)
    The converter writes one JSON file per conversation to a subdirectory
    named after the source — `output/grok` or `output/claude`.
 5. Generate SQL statements from the converted JSON files:
