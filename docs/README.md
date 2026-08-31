@@ -11,14 +11,48 @@ Any private-use Unicode characters occasionally found in model exports are strip
 
 OpenRouter Playground stores chat history in browser localStorage and exports in `orpg.3.0` format. This script handles that specific format and outputs a single JSON file ready for direct import via Open-WebUI's built-in import feature.
 
+## Finding your Open WebUI user ID
+
+Every converter needs `--userid`, and it has to be the exact UUID Open
+WebUI already assigned your account, not your name or email. The
+reliable way to get it is to query `webui.db` directly.
+
+The database lives inside the `open-webui` container's data volume, at
+`/app/backend/data/webui.db`. Reading it through a short-lived container
+mounted against that same volume works regardless of platform — some
+Docker setups (Docker Desktop's VM, OrbStack, a remote host) don't expose
+named-volume paths to the host filesystem at all, or expose them through
+a bridge that doesn't handle SQLite's file locking correctly, so this is
+also the version worth reaching for even if you think you can browse the
+volume directly:
+
+```bash
+docker run --rm -v open-webui:/data alpine sh -c \
+  "apk add --no-cache sqlite >/dev/null && sqlite3 /data/webui.db 'select id, email, name from user;'"
+```
+
+Replace `open-webui` with your actual volume name if your deployment
+names it differently — check with `docker volume ls`. The `id` column is
+the value every `--userid` flag below wants.
+
+This is a read-only query, so it's safe to run while Open WebUI is up.
+The same is not true once you get to running the SQL `create_sql.py`
+generates: stop the Open WebUI container first, and keep a copy of
+`webui.db` from before you ran it. Writing to the database while the app
+still has it open risks a corrupted WAL file, which costs a lot more time
+than the import was meant to save.
+
 ## Quick start
 
 ```
-python .\convert_chatgpt.py --userid="get-this-from-your-webui.db" .\chatgpt.json
-python .\create_sql.py ./output/chatgpt --tags="imported-chatgpt" --output=chatgpt.sql
+python ./convert_chatgpt.py --userid="get-this-from-your-webui.db" ./chatgpt.json
+python ./create_sql.py ./output/chatgpt --tags="imported-chatgpt" --output=chatgpt.sql
 --
-python .\convert_aistudio.py --userid="get-this-from-your-webui.db" .\aistudio_example.json
-python .\create_sql.py ./output/aistudio --tags="imported-aistudio" --output=aistudio.sql
+python ./convert_aistudio.py --userid="get-this-from-your-webui.db" ./aistudio_example.json
+python ./create_sql.py ./output/aistudio --tags="imported-aistudio" --output=aistudio.sql
+--
+python ./convert_claude.py --userid="get-this-from-your-webui.db" ./claude_example.json
+python ./create_sql.py ./output/claude --tags="imported-claude" --output=claude.sql
 ```
 
 ## Quickstart Docker
@@ -43,25 +77,29 @@ docker run --rm -v ${PWD}/data:/data `
   python create_sql.py /data/output/chatgpt --tags="imported-chatgpt" --output=/data/chatgpt.sql
 ```
 
-Full example for GPT and Grok:
+Full example for GPT, AI Studio, Grok and Claude:
 
 ```
-python .\convert_chatgpt.py --userid="example-9cef-4387-8ee4-b82eb2e1c637" .\chatgpt.json
-python .\convert_aistudio.py --userid="example-9cef-4387-8ee4-b82eb2e1c637" .\aistudio_example.json
-python .\convert_grok.py --userid="example-9cef-4387-8ee4-b82eb2e1c637" .\grok.json      
-python .\create_sql.py ./output/chatgpt --tags="imported-chatgpt" --output=chatgpt.sql
-python .\create_sql.py ./output/aistudio --tags="imported-aistudio" --output=aistudio.sql
-python .\create_sql.py ./output/grok --tags="imported-grok" --output=grok.sql
+python ./convert_chatgpt.py --userid="example-9cef-4387-8ee4-b82eb2e1c637" ./chatgpt.json
+python ./convert_aistudio.py --userid="example-9cef-4387-8ee4-b82eb2e1c637" ./aistudio_example.json
+python ./convert_grok.py --userid="example-9cef-4387-8ee4-b82eb2e1c637" ./grok.json
+python ./convert_claude.py --userid="example-9cef-4387-8ee4-b82eb2e1c637" ./claude_example.json
+python ./create_sql.py ./output/chatgpt --tags="imported-chatgpt" --output=chatgpt.sql
+python ./create_sql.py ./output/aistudio --tags="imported-aistudio" --output=aistudio.sql
+python ./create_sql.py ./output/grok --tags="imported-grok" --output=grok.sql
+python ./create_sql.py ./output/claude --tags="imported-claude" --output=claude.sql
 # Now run the scripts inside DB Browser and hit save
 ```
 
-example for Openrouter:
+Example for Openrouter:
+
 ```
-python .\convert_openrouter.py --userid="get-this-from-your-webui.db" .\openrouter.json
+python ./convert_openrouter.py --userid="get-this-from-your-webui.db" ./openrouter.json
 
 # The output file output/openrouter/openrouter_import.json can be imported directly
-via Open-WebUI: Settings → Data → Import Chat History.
+# via Open-WebUI: Settings → Data → Import Chat History.
 ```
+
 ## Scripts
 
 Install the required Python dependencies first:
@@ -162,20 +200,34 @@ This will convert all `.json` (and extensionless files for AI Studio) in `./my_c
 
 ## Example workflow
 
-1. Create an export from AI Studio (Gemini), Claude, ChatGPT or Grok.
-2. Unzip the archive and locate the JSON file (for Grok this is `prod-grok-backend.json`).
-3. Convert the export to open-webui JSON using the appropriate script:
+1. Create an export from AI Studio (Gemini), Claude, ChatGPT or Grok. For
+   Claude: Settings → Account → Export data, from claude.ai — the export
+   arrives by email as a zip containing `conversations.json`.
+2. Unzip the archive and locate the JSON file (for Grok this is
+   `prod-grok-backend.json`; for Claude, `conversations.json`).
+3. Look up your Open WebUI user ID if you haven't already — see
+   ["Finding your Open WebUI user ID"](#finding-your-open-webui-user-id)
+   above.
+4. Convert the export to open-webui JSON using the appropriate script.
+   For Grok:
    ```bash
    python ./convert_grok.py --userid="d95194d2-9cef-4387-8ee4-b82eb2e1c637" ./grok.json
    ```
-   The converter writes JSON files to a subdirectory such as `output/grok`.
-4. Generate SQL statements from the converted JSON files:
+   For Claude:
    ```bash
-   python ./create_sql.py ./output --tags="imported-grok" --output=grok.sql
+   python ./convert_claude.py --userid="d95194d2-9cef-4387-8ee4-b82eb2e1c637" ./conversations.json
+   ```
+   The converter writes one JSON file per conversation to a subdirectory
+   named after the source — `output/grok` or `output/claude`.
+5. Generate SQL statements from the converted JSON files:
+   ```bash
+   python ./create_sql.py ./output/claude --tags="imported-claude" --output=claude.sql
    ```
    The resulting SQL removes any existing chats with the same IDs before
    inserting new ones, while tags are inserted using UPSERTs so they are
    updated if they already exist. Any tags passed with `--tags` are also created
    for each user.
-5. Make a copy of your `webui.db` database.
-6. Execute the generated SQL using a tool such as [DB Browser for SQLite](https://sqlitebrowser.org/dl/). Ensure you save the database.
+6. Make a copy of your `webui.db` database, and stop the Open WebUI
+   container before the next step — see the caution in ["Finding your
+   Open WebUI user ID"](#finding-your-open-webui-user-id) above.
+7. Execute the generated SQL using a tool such as [DB Browser for SQLite](https://sqlitebrowser.org/dl/). Ensure you save the database, then start Open WebUI back up.
